@@ -1,2 +1,0 @@
-# termux-miner
-cpuminer
