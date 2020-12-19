@@ -1,4 +1,4 @@
-CPUMiner-Multi
+termux-miner
 ==============
 
 [![Build Status](https://travis-ci.org/tpruvot/cpuminer-multi.svg)](https://travis-ci.org/tpruvot/cpuminer-multi)
