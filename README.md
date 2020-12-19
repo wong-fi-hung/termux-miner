@@ -22,8 +22,11 @@ Algorithms
 #### Currently supported
  * ✓ __scrypt__ (Litecoin, Dogecoin, Feathercoin, ...)
  * ✓ __scrypt:N__
- * ✓ __scrypt-jane:N__
+ * ✓ __scryptn2__ (Verium)
+ * ✓ __scryptn11__ (Fujicoin)
+ * ✓ __scryptjane:N__
  * ✓ __sha256d__ (Bitcoin, Freicoin, Peercoin/PPCoin, Terracoin, ...)
+ * ✓ __argon2__
  * ✓ __allium__ (Garlicoin, Tuxcoin)
  * ✓ __axiom__ (Axiom Shabal-256 based MemoHash)
  * ✓ __bastion__ (Joincoin [J])
@@ -32,7 +35,8 @@ Algorithms
  * ✓ __blake2s__ (NevaCoin Blake2-S 256)
  * ✓ __blake2b__ (Not SIA one)
  * ✓ __bmw__ (Midnight [MDT] BMW-256)
- * ✓ __cryptonight__ (Bytecoin [BCN], Monero [XMR])
+ * ✓ __bmw512__ (XDN [Digitalnote] KONJ [Konjungate] BMW-512 Bits)
+ * ✓ __cryptonight__ (Bytecoin [BCN], MoneroClassic [XMC])
  * ✓ __cryptonight-light__ (Aeon)
  * ✓ __decred__ (Blake256-14 [DCR])
  * ✓ __dmd-gr__ (Diamond-Groestl)
@@ -45,10 +49,13 @@ Algorithms
  * ✓ __lyra2REv2__
  * ✓ __lyra2REv3__ (VertCoin [VTC])
  * ✓ __myr-gr__ Myriad-Groestl (MyriadCoin [MYR])
+ * ✓ __m7m__ (M7-M Magi new algo)
+ * ✓ __m7old__ (M7-M Magi old version)
  * ✓ __neoscrypt__ (Feathercoin)
  * ✓ __nist5__ (MistCoin [MIC], TalkCoin [TAC], ...)
  * ✓ __pentablake__ (Joincoin)
  * ✓ __pluck__ (Supcoin [SUP])
+ * ✓ __power2b__ (Microbitcoin)
  * ✓ __quark__ (Quarkcoin)
  * ✓ __qubit__ (GeoCoin)
  * ✓ __skein__ (Skeincoin, Myriadcoin, Xedoscoin, ...)
@@ -60,6 +67,7 @@ Algorithms
  * ✓ __tribus__ 3 of the top NIST5 algos (Denarius [DNR])
  * ✓ __vanilla__ (Blake-256 8-rounds - double sha256 [VNL])
  * ✓ __veltor__ (Veltor [VLT])
+ * ✓ __velvet__
  * ✓ __xevan__ x17 x 2 on bigger header (BitSend [BSD])
  * ✓ __x11evo__ (Revolver [XRE])
  * ✓ __x11__ (Darkcoin [DRK], Hirocoin, Limecoin, ...)
@@ -72,7 +80,16 @@ Algorithms
  * ✓ __x16s__ (Pigeoncoin [PGN])
  * ✓ __x17__ (Verge [XVG])
  * ✓ __x20r__
+ * ✓ __yespower__
+ * ✓ __yespowerR16__ (Yenten)
+ * ✓ __yespowerIC__ (IsotopeC)
+ * ✓ __yespowerLITB__ (LightBit)
+ * ✓ __yespowerIOTS__ (based algo for IOT device)
+ * ✓ __yespowerITC__
+ * ✓ __yespowerSUGAR__ (Sugarchain)
+ * ✓ __yespowerURX__ (Uraniumx)
  * ✓ __yescrypt__ (GlobalBoostY [BSTY], Unitus [UIS], MyriadCoin [MYR])
+ * ✓ __yescryptR16__ (Goldcash, Eli)
  * ✓ __zr5__ (Ziftrcoin [ZRC])
 
 #### Implemented, but untested
