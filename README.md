@@ -36,6 +36,7 @@ Algorithms
  * ✓ __blake2b__ (Not SIA one)
  * ✓ __bmw__ (Midnight [MDT] BMW-256)
  * ✓ __bmw512__ (XDN [Digitalnote] KONJ [Konjungate] BMW-512 Bits)
+ * ✓ __cpupower__ (CPUchain)
  * ✓ __cryptonight__ (Bytecoin [BCN], MoneroClassic [XMC])
  * ✓ __cryptonight-light__ (Aeon)
  * ✓ __decred__ (Blake256-14 [DCR])
