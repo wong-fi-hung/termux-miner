@@ -86,8 +86,9 @@ Algorithms
  * ✓ __yespowerIC__ (IsotopeC)
  * ✓ __yespowerLITB__ (LightBit)
  * ✓ __yespowerIOTS__ (based algo for IOT device)
- * ✓ __yespowerITC__
+ * ✓ __yespowerITC__ (Intercoin [ITC])
  * ✓ __yespowerSUGAR__ (Sugarchain)
+ * ✓ __yespowerTIDE__ (Tidecoin) [TIDE]
  * ✓ __yespowerURX__ (Uraniumx)
  * ✓ __yescrypt__ (GlobalBoostY [BSTY], Unitus [UIS], MyriadCoin [MYR])
  * ✓ __yescryptR16__ (Goldcash, Eli)
@@ -138,6 +139,14 @@ _OR_
 ```
  apt-get install automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev zlib1g-dev make g++
 ```
+
+#### if build with ubuntu onandroid:
+
+```
+Use
+./build-android.sh
+```
+
 
 #### Note for OS X users:
 
