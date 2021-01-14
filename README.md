@@ -140,7 +140,7 @@ _OR_
  apt-get install automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev zlib1g-dev make g++
 ```
 
-#### if build with ubuntu onandroid:
+#### if build with ubuntu on android:
 
 ```
 Use
