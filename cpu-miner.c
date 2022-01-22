@@ -182,138 +182,139 @@ static char const usage[] = "\
 Usage: ./"PROGRAMNAME " [OPTIONS]\n\
 Options:\n\
   -a, --algo=ALGO       specify the algorithm to use\n\
-                          allium       Garlicoin double lyra2\n\
-                          axiom        Shabal-256 MemoHash\n\
-                          bitcore      Timetravel with 10 algos\n\
-                          blake        Blake-256 14-rounds (SFR)\n\
-                          blakecoin    Blake-256 single sha256 merkle\n\
-                          blake2b      Blake2-B (512)\n\
-                          blake2s      Blake2-S (256)\n\
-                          bmw          BMW 256\n\
-			  bmw512       BMW 512 (KONJ & XDN)\n\
-                          c11/flax     C11\n\
-                          cryptolight  Cryptonight-light\n\
-                          cryptonight  Monero\n\
-			  curve        CURVE (default no diff factor)\n\
-			  curve-zpool  CURVE (only for zpool)\n\
-                          decred       Blake-256 14-rounds 180 bytes\n\
-                          dmd-gr       Diamond-Groestl\n\
-                          drop         Dropcoin\n\
-                          fresh        Fresh\n\
-                          geek         GeekCash\n\
-                          groestl      GroestlCoin\n\
-                          heavy        Heavy\n\
-                          jha          JHA\n\
-                          keccak       Keccak (Old and deprecated)\n\
-                          keccakc      Keccak (CreativeCoin)\n\
-                          luffa        Luffa\n\
-                          lyra2re      Lyra2RE\n\
-                          lyra2rev2    Lyra2REv2\n\
-                          lyra2v3      Lyra2REv3 (Vertcoin)\n\
-                          myr-gr       Myriad-Groestl\n\
-                          minotaur     Ring\n\
-                          minotaurx    LCC\n\
-                          neoscrypt    NeoScrypt(128, 2, 1)\n\
-                          nist5        Nist5\n\
-                          pluck        Pluck:128 (Supcoin)\n\
-                          pentablake   Pentablake\n\
-			  power2b      MBC (Microbitc)\n\
-                          phi          LUX initial algo\n\
-                          phi2         LUX newer algo\n\
-                          quark        Quark\n\
-                          qubit        Qubit\n\
-                          rainforest   RainForest (256)\n\
-                          scrypt       scrypt(1024, 1, 1) (default)\n\
-			  scryptn2     scrypt(1045678 for VRM [verium])\n\
-			  scryptn11    scrypt(2048 for [FUJI] Fujicoin)\n\
-                          scrypt:N     scrypt(N, 1, 1)\n\
-                          scrypt-jane:N (with N factor from 4 to 30)\n\
-                          shavite3     Shavite3\n\
-                          sha256d      SHA-256d\n\
-                          sia          Blake2-B\n\
-                          sib          X11 + gost (SibCoin)\n\
-                          skein        Skein+Sha (Skeincoin)\n\
-                          skein2       Double Skein (Woodcoin)\n\
-                          sonoa        A series of 97 hashes from x17\n\
-                          s3           S3\n\
-                          timetravel   Timetravel (Machinecoin)\n\
-                          vanilla      Blake-256 8-rounds\n\
-                          x11evo       Permuted x11\n\
-                          x11          X11\n\
-                          x12          X12\n\
-                          x13          X13\n\
-                          x14          X14\n\
-                          x15          X15\n\
-                          x16r         X16R\n\
-                          x16rv2       X16Rv2 (Raven / Trivechain)\n\
-                          x16s         X16S (Pigeon)\n\
-                          x17          X17\n\
-                          x20r         X20R\n\
-                          xevan        Xevan (BitSend)\n\
-                          yescrypt     Yescrypt for XMY, BSTY, and QBC\n\
-                          yescryptR8   YescryptR8 for KOTO\n\
-                          yescryptR16  YescryptR16 for GOLD[Goldcash], QOGE[Qogecoin]\n\
-			  yescryptR32  YescryptR32\n\
-			  yespower     yespower(default)\n\
-			  yespowerIC   ISO (IsotopeC)\n\
-			  yespowerIOTS yespower based for iots device\n\
-			  yespowerITC  ITC (Intercoin)\n\
-			  yespowerLITB LITB (Lightbit)\n\
-			  yespowerLNC  LTNCG(LightningCashGold)\n\
-			  yespowerR16  YTN (Yenten)\n\
-			  yespowerSUGAR SUGAR (Sugarchain)\n\
-			  yespowerURX  URX (UraniumX)\n\
-                          zr5          ZR5\n\
-  -o, --url=URL         URL of mining server\n\
-  -O, --userpass=U:P    username:password pair for mining server\n\
-  -u, --user=USERNAME   username for mining server\n\
-  -p, --pass=PASSWORD   password for mining server\n\
-      --cert=FILE       certificate for mining server using SSL\n\
+                          allium         Garlicoin double lyra2\n\
+                          axiom          Shabal-256 MemoHash\n\
+                          bitcore        Timetravel with 10 algos\n\
+                          blake          Blake-256 14-rounds (SFR)\n\
+                          blakecoin      Blake-256 single sha256 merkle\n\
+                          blake2b        Blake2-B (512)\n\
+                          blake2s        Blake2-S (256)\n\
+                          bmw            BMW 256\n\
+			  bmw512         BMW 512 (KONJ & XDN)\n\
+                          c11/flax       C11\n\
+                          cryptolight    Cryptonight-light\n\
+                          cryptonight    Monero\n\
+			  curve          CURVE (default no diff factor)\n\
+			  curve-zpool    CURVE (only for zpool)\n\
+                          decred         Blake-256 14-rounds 180 bytes\n\
+                          dmd-gr         Diamond-Groestl\n\
+                          drop           Dropcoin\n\
+                          fresh          Fresh\n\
+                          geek           GeekCash\n\
+                          groestl        GroestlCoin\n\
+                          heavy          Heavy\n\
+                          jha            JHA\n\
+                          keccak         Keccak (Old and deprecated)\n\
+                          keccakc        Keccak (CreativeCoin)\n\
+                          luffa          Luffa\n\
+                          lyra2re        Lyra2RE\n\
+                          lyra2rev2      Lyra2REv2\n\
+                          lyra2v3        Lyra2REv3 (Vertcoin)\n\
+                          myr-gr         Myriad-Groestl\n\
+                          minotaur       Ring\n\
+                          minotaurx      LCC\n\
+                          neoscrypt      NeoScrypt(128, 2, 1)\n\
+                          nist5          Nist5\n\
+                          pluck          Pluck:128 (Supcoin)\n\
+                          pentablake     Pentablake\n\
+			  power2b        MBC (Microbitc)\n\
+                          phi            LUX initial algo\n\
+                          phi2           LUX newer algo\n\
+                          quark          Quark\n\
+                          qubit          Qubit\n\
+                          rainforest     RainForest (256)\n\
+                          scrypt         scrypt(1024, 1, 1) (default)\n\
+			  scryptn2       scrypt(1045678 for VRM [verium])\n\
+			  scryptn11      scrypt(2048 for [FUJI] Fujicoin)\n\
+                          scrypt:N       scrypt(N, 1, 1)\n\
+                          scrypt-jane:N  (with N factor from 4 to 30)\n\
+                          shavite3       Shavite3\n\
+                          sha256d        SHA-256d\n\
+                          sia            Blake2-B\n\
+                          sib            X11 + gost (SibCoin)\n\
+                          skein          Skein+Sha (Skeincoin)\n\
+                          skein2         Double Skein (Woodcoin)\n\
+                          sonoa          A series of 97 hashes from x17\n\
+                          s3             S3\n\
+                          timetravel     Timetravel (Machinecoin)\n\
+                          vanilla        Blake-256 8-rounds\n\
+                          x11evo         Permuted x11\n\
+                          x11            X11\n\
+                          x12            X12\n\
+                          x13            X13\n\
+                          x14            X14\n\
+                          x15            X15\n\
+                          x16r           X16R\n\
+                          x16rv2         X16Rv2 (Raven / Trivechain)\n\
+                          x16s           X16S (Pigeon)\n\
+                          x17            X17\n\
+                          x20r           X20R\n\
+                          xevan          Xevan (BitSend)\n\
+                          yescrypt       Yescrypt for XMY, BSTY, and QBC\n\
+                          yescryptR8     YescryptR8 for KOTO\n\
+                          yescryptR16    YescryptR16 for GOLD[Goldcash], QOGE[Qogecoin]\n\
+			  yescryptR32    YescryptR32\n\
+			  yespower       yespower(default)\n\
+			  yespowerIC     ISO (IsotopeC)\n\
+			  yespowerIOTS   yespower based for iots device\n\
+			  yespowerITC    ITC (Intercoin)\n\
+			  yespowerLITB   LITB (Lightbit)\n\
+			  yespowerLNC    LTNCG(LightningCashGold)\n\
+			  yespowerR16    YTN (Yenten)\n\
+			  yespowerSUGAR  SUGAR (Sugarchain)\n\
+			  yespowerTIDE   TDC (Tidecoin)\n\
+			  yespowerURX    URX (UraniumX)\n\
+                          zr5            ZR5\n\
+  -o, --url=URL           URL of mining server\n\
+  -O, --userpass=U:P      username:password pair for mining server\n\
+  -u, --user=USERNAME     username for mining server\n\
+  -p, --pass=PASSWORD     password for mining server\n\
+      --cert=FILE         certificate for mining server using SSL\n\
   -x, --proxy=[PROTOCOL://]HOST[:PORT]  connect through a proxy\n\
-  -t, --threads=N       number of miner threads (default: number of processors)\n\
-  -r, --retries=N       number of times to retry if a network call fails\n\
-                          (default: retry indefinitely)\n\
-  -R, --retry-pause=N   time to pause between retries, in seconds (default: 30)\n\
-      --time-limit=N    maximum time [s] to mine before exiting the program.\n\
-  -T, --timeout=N       timeout for long poll and stratum (default: 300 seconds)\n\
-  -s, --scantime=N      upper bound on time spent scanning current work when\n\
-                          long polling is unavailable, in seconds (default: 5)\n\
-      --randomize       Randomize scan range start to reduce duplicates\n\
-  -f, --diff-factor     Divide req. difficulty by this factor (std is 1.0)\n\
-  -m, --diff-multiplier Multiply difficulty by this factor (std is 1.0)\n\
-  -n, --nfactor         neoscrypt N-Factor\n\
-      --coinbase-addr=ADDR  payout address for solo mining\n\
+  -t, --threads=N          number of miner threads (default: number of processors)\n\
+  -r, --retries=N          number of times to retry if a network call fails\n\
+                           (default: retry indefinitely)\n\
+  -R, --retry-pause=N      time to pause between retries, in seconds (default: 30)\n\
+      --time-limit=N       maximum time [s] to mine before exiting the program.\n\
+  -T, --timeout=N          timeout for long poll and stratum (default: 300 seconds)\n\
+  -s, --scantime=N         upper bound on time spent scanning current work when\n\
+                           long polling is unavailable, in seconds (default: 5)\n\
+      --randomize          Randomize scan range start to reduce duplicates\n\
+  -f, --diff-factor        Divide req. difficulty by this factor (std is 1.0)\n\
+  -m, --diff-multiplier    Multiply difficulty by this factor (std is 1.0)\n\
+  -n, --nfactor            neoscrypt N-Factor\n\
+      --coinbase-addr=ADDR payout address for solo mining\n\
       --coinbase-sig=TEXT  data to insert in the coinbase when possible\n\
-      --max-log-rate    limit per-core hashrate logs (default: 5s)\n\
-      --no-longpoll     disable long polling support\n\
-      --no-getwork      disable getwork support\n\
-      --no-gbt          disable getblocktemplate support\n\
-      --no-stratum      disable X-Stratum support\n\
-      --no-extranonce   disable Stratum extranonce support\n\
-      --no-redirect     ignore requests to change the URL of the mining server\n\
-  -q, --quiet           disable per-thread hashmeter output\n\
-      --no-color        disable colored output\n\
-  -D, --debug           enable debug output\n\
-  -P, --protocol-dump   verbose dump of protocol-level activities\n\
-      --hide-diff       Hide submitted block and net difficulty\n"
+      --max-log-rate       limit per-core hashrate logs (default: 5s)\n\
+      --no-longpoll        disable long polling support\n\
+      --no-getwork         disable getwork support\n\
+      --no-gbt             disable getblocktemplate support\n\
+      --no-stratum         disable X-Stratum support\n\
+      --no-extranonce      disable Stratum extranonce support\n\
+      --no-redirect        ignore requests to change the URL of the mining server\n\
+  -q, --quiet              disable per-thread hashmeter output\n\
+      --no-color           disable colored output\n\
+  -D, --debug              enable debug output\n\
+  -P, --protocol-dump      verbose dump of protocol-level activities\n\
+      --hide-diff          Hide submitted block and net difficulty\n"
 #ifdef HAVE_SYSLOG_H
 "\
-  -S, --syslog          use system log for output messages\n"
+  -S, --syslog             use system log for output messages\n"
 #endif
 "\
-  -B, --background      run the miner in the background\n\
-      --benchmark       run in offline benchmark mode\n\
-      --cputest         debug hashes from cpu algorithms\n\
-      --cpu-affinity    set process affinity to cpu core(s), mask 0x3 for cores 0 and 1\n\
-      --cpu-priority    set process priority (default: 0 idle, 2 normal to 5 highest)\n\
-  -b, --api-bind        IP/Port for the miner API (default: 127.0.0.1:4048)\n\
-      --api-remote      Allow remote control\n\
-      --max-temp=N      Only mine if cpu temp is less than specified value (linux)\n\
-      --max-rate=N[KMG] Only mine if net hashrate is less than specified value\n\
-      --max-diff=N      Only mine if net difficulty is less than specified value\n\
-  -c, --config=FILE     load a JSON-format configuration file\n\
-  -V, --version         display version information and exit\n\
-  -h, --help            display this help text and exit\n\
+  -B, --background         run the miner in the background\n\
+      --benchmark          run in offline benchmark mode\n\
+      --cputest            debug hashes from cpu algorithms\n\
+      --cpu-affinity       set process affinity to cpu core(s), mask 0x3 for cores 0 and 1\n\
+      --cpu-priority       set process priority (default: 0 idle, 2 normal to 5 highest)\n\
+  -b, --api-bind           IP/Port for the miner API (default: 127.0.0.1:4048)\n\
+      --api-remote         Allow remote control\n\
+      --max-temp=N         Only mine if cpu temp is less than specified value (linux)\n\
+      --max-rate=N[KMG]    Only mine if net hashrate is less than specified value\n\
+      --max-diff=N         Only mine if net difficulty is less than specified value\n\
+  -c, --config=FILE        load a JSON-format configuration file\n\
+  -V, --version            display version information and exit\n\
+  -h, --help               display this help text and exit\n\
 ";
 
 
@@ -965,7 +966,7 @@ static int share_result(int result, struct work *work, const char *reason)
 	}
 
 	if (opt_showdiff)
-		sprintf(suppl, "diff %.3f", sharediff);
+		sprintf(suppl, "diff %.8f", sharediff);
 	else // accepted percent
 		sprintf(suppl, "%.2f%%", 100. * accepted_count / (accepted_count + rejected_count));
 
@@ -991,9 +992,10 @@ static int share_result(int result, struct work *work, const char *reason)
 	case ALGO_YESPOWERLITB:
 	case ALGO_YESPOWERLNC:
 	case ALGO_YESPOWERSUGAR:
+	case ALGO_YESPOWERTIDE:
 	case ALGO_YESPOWERURX:
 		sprintf(s, hashrate >= 1e6 ? "%.0f" : "%.2f", hashrate);
-		applog(LOG_NOTICE, "%s" CL_WHT ": [%lu|%lu] (%s), %s H/s",
+		applog(LOG_NOTICE, "%s" CL_WHT ": [%lu]:[" CL_RED "%lu" CL_WHT"] %s, %s H/s",
 			flag, accepted_count, rejected_count,
 			suppl, s);
 		break;
@@ -1001,13 +1003,13 @@ static int share_result(int result, struct work *work, const char *reason)
         case ALGO_BMW512:
         case ALGO_SHA256D:
                 sprintf(s, hashrate >= 1e6 ? "%.0f" : "%.2f", hashrate / 1000000.00);
-                applog(LOG_NOTICE, "%s" CL_WHT ": [%lu|%lu] (%s), %s MH/s",
+		applog(LOG_NOTICE, "%s" CL_WHT ": [%lu]:[" CL_RED "%lu" CL_WHT"] %s, %s MH/s",
                         flag, accepted_count, rejected_count,
                         suppl, s);
                 break;
 	default:
 		sprintf(s, hashrate >= 1e6 ? "%.0f" : "%.2f", hashrate / 1000.0);
-		applog(LOG_NOTICE, "%s" CL_WHT ": [%lu|%lu] (%s), %s kH/s",
+		applog(LOG_NOTICE, "%s" CL_WHT ": [%lu]:[" CL_RED "%lu" CL_WHT"] %s, %s kH/s",
 			flag, accepted_count, rejected_count,
 			suppl, s);
 		break;
@@ -1778,6 +1780,7 @@ static void stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 			case ALGO_YESPOWERLITB:
 			case ALGO_YESPOWERLNC:
 			case ALGO_YESPOWERSUGAR:
+			case ALGO_YESPOWERTIDE:
 			case ALGO_YESPOWERURX:
 				work_set_target(work, sctx->job.diff / (65536.0 * opt_diff_factor));
 				break;
@@ -2135,6 +2138,7 @@ static void *miner_thread(void *userdata)
 			case ALGO_YESPOWERLITB:
 			case ALGO_YESPOWERLNC:
 			case ALGO_YESPOWERSUGAR:
+			case ALGO_YESPOWERTIDE:
 			case ALGO_YESPOWERURX:
 				max64 = 499;
 				break;
@@ -2446,6 +2450,9 @@ static void *miner_thread(void *userdata)
 			break;
 		case ALGO_YESPOWERSUGAR:
 			rc = scanhash_yespowerSUGAR(thr_id, work.data, work.target, max_nonce, & hashes_done);
+			break;
+		case ALGO_YESPOWERTIDE:
+			rc = scanhash_yespowerTIDE(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_YESPOWERURX:
 			rc = scanhash_yespowerURX(thr_id, work.data, work.target, max_nonce, &hashes_done);
