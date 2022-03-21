@@ -137,7 +137,7 @@ _OR_
 #### Note for Debian/Ubuntu users:
 
 ```
- apt-get install automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev zlib1g-dev make g++
+ apt-get install automake autoconf pkg-config libcurl4-openssl-dev libjansson-dev libssl-dev libgmp-dev zlib1g-dev make g++ libtool
 ```
 
 #### if build with ubuntu on android:
