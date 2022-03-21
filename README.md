@@ -50,8 +50,8 @@ Algorithms
  * ✓ __lyra2REv2__
  * ✓ __lyra2REv3__ (VertCoin [VTC])
  * ✓ __myr-gr__ Myriad-Groestl (MyriadCoin [MYR])
- * ✓ __m7m__ (M7-M Magi new algo for Magicoin [XMG] Noble [NOBL])
- * ✓ __m7old__ (M7-M Magi old version Magicoin [XMG] Noble [NOBL])
+ * ✓ __minotaur__ (Ring [RNG]) 
+ * ✓ __minotaurx__ (Avian [AVN])
  * ✓ __neoscrypt__ (Feathercoin)
  * ✓ __nist5__ (MistCoin [MIC], TalkCoin [TAC], ...)
  * ✓ __pentablake__ (Joincoin)
