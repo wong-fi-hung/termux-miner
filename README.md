@@ -95,6 +95,7 @@ Algorithms
  * ✓ __yescrypt__ (GlobalBoostY [BSTY], Unitus [UIS], MyriadCoin [MYR])
  * ✓ __yescryptR8__ (GlobalToken [GLT])
  * ✓ __yescryptR16__ (Goldcash [GOLD] Eli [ELI])
+ * ✓ __yescryptR32__ (Documentchain [DMS])
  * ✓ __zr5__ (Ziftrcoin [ZRC])
 
 #### Implemented, but untested
