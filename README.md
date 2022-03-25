@@ -80,6 +80,7 @@ Algorithms
  * ✓ __x16rv2__ (RavenClassic [RVC], Trivechain [TRVC])
  * ✓ __x16s__ (Pigeoncoin [PGN])
  * ✓ __x17__ (Verge [XVG])
+ * ✓ __0x10__ (ChainOX [CHOX])
  * ✓ __x20r__
  * ✓ __yespower__ (Pyrk [PYRK] Cranepay [CRP])
  * ✓ __yespowerR16__ (Yenten [YTN])
@@ -87,10 +88,12 @@ Algorithms
  * ✓ __yespowerLITB__ (LightBit [LITB] )
  * ✓ __yespowerIOTS__ (based algo for IOT device)
  * ✓ __yespowerITC__ (Intercoin [ITC])
+ * ✓ __yespowerMGPC__ (Magpiecoin [MGPC])
  * ✓ __yespowerSUGAR__ (Sugarchain [SUGAR])
  * ✓ __yespowerTIDE__ (Tidecoin [TIDE])
  * ✓ __yespowerURX__ (Uraniumx [URX])
  * ✓ __yescrypt__ (GlobalBoostY [BSTY], Unitus [UIS], MyriadCoin [MYR])
+ * ✓ __yescryptR8__ (GlobalToken [GLT])
  * ✓ __yescryptR16__ (Goldcash [GOLD] Eli [ELI])
  * ✓ __zr5__ (Ziftrcoin [ZRC])
 
