@@ -1860,7 +1860,7 @@ static void stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 			// store for api stats
 			stratum_diff = sctx->job.diff;
 			if (opt_showdiff && work->targetdiff != stratum_diff)
-				snprintf(sdiff, 32, " (%.5f)", work->targetdiff);
+				snprintf(sdiff, 32, " (%.8f)", work->targetdiff);
 			applog(LOG_WARNING, "Stratum difficulty set to %g%s", stratum_diff, sdiff);
 		}
 	}
