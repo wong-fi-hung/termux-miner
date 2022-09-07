@@ -195,7 +195,6 @@ Options:\n\
                           cryptolight    Cryptonight-light\n\
                           cryptonight    Monero\n\
 			  curve          CURVE (default no diff factor)\n\
-			  curve-zpool    CURVE (only for zpool)\n\
                           decred         Blake-256 14-rounds 180 bytes\n\
                           dmd-gr         Diamond-Groestl\n\
                           drop           Dropcoin\n\
@@ -1009,6 +1008,7 @@ static int share_result(int result, struct work *work, const char *reason)
 
 	scale_hash_for_display (&hashcount, hc_units);
 	scale_hash_for_display (&hashrate, hr_units);
+;
 	if ( hc_units[0] )
 	{
 	sprintf(hc, "%.2f", hashcount );
@@ -1039,9 +1039,9 @@ static int share_result(int result, struct work *work, const char *reason)
 	switch (opt_algo) {
 
 	default:
-		sprintf(s, hashrate >= 1e6 ? "%.0f" : "%.2f", hashrate / 1000.0);
+//		sprintf(s, hashrate >= 1e6 ? "%.0f" : "%.2f", hashrate / 1000.0);
 		applog(LOG_NOTICE, "%s" CL_WHT ": [%lu]:[" CL_RED "%lu" CL_WHT"] %s, %s %sH/s",
-			flag, accepted_count, rejected_count,
+		flag, accepted_count, rejected_count,
 			suppl, hr, hr_units);
 		break;
 	}
@@ -1049,8 +1049,8 @@ static int share_result(int result, struct work *work, const char *reason)
 	if (reason) {
 		applog(LOG_WARNING, "reject reason: %s", reason);
 		if (0 && strncmp(reason, "low difficulty share", 20) == 0) {
-			opt_diff_factor = (opt_diff_factor * 2.0) / 3.0;
-			applog(LOG_WARNING, "factor reduced to : %0.2f", opt_diff_factor);
+		opt_diff_factor = (opt_diff_factor * 2.0) / 3.0;
+		applog(LOG_WARNING, "factor reduced to : %0.2f", opt_diff_factor);
 			return 0;
 		}
 	}
@@ -1791,7 +1791,6 @@ static void stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 		}
 
 		switch (opt_algo) {
-			case ALGO_CPUPOWER:
 			case ALGO_DROP:
 			case ALGO_JHA:
 			case ALGO_SCRYPT:
@@ -2160,7 +2159,6 @@ static void *miner_thread(void *userdata)
 			case ALGO_YESCRYPTR32:
 				max64 = 0xfff;
 				break;
-			case ALGO_CPUPOWER:
 			case ALGO_POWER2B:
 			case ALGO_YESPOWER:
 			case ALGO_YESPOWERR16:
@@ -2264,6 +2262,9 @@ static void *miner_thread(void *userdata)
 		case ALGO_BLAKECOIN:
 			rc = scanhash_blakecoin(thr_id, &work, max_nonce, &hashes_done);
 			break;
+		case ALGO_BLAKE2B:
+			rc = scanhash_blake2b(thr_id, &work, max_nonce, &hashes_done);
+			break;
 		case ALGO_BLAKE2S:
 			rc = scanhash_blake2s(thr_id, &work, max_nonce, &hashes_done);
 			break;
@@ -2275,8 +2276,6 @@ static void *miner_thread(void *userdata)
                         break;
 		case ALGO_C11:
 			rc = scanhash_c11(thr_id, &work, max_nonce, &hashes_done);
-			break;
-		case ALGO_CPUPOWER:
 			break;
 		case ALGO_CRYPTOLIGHT:
 			rc = scanhash_cryptolight(thr_id, &work, max_nonce, &hashes_done);
@@ -2521,7 +2520,7 @@ static void *miner_thread(void *userdata)
 			case ALGO_CRYPTONIGHT:
 			case ALGO_PLUCK:
 			case ALGO_SCRYPTJANE:
-//				applog(LOG_INFO, "CPU #%d: %.2f H/s", thr_id, thr_hashrates[thr_id]);
+//			applog(LOG_INFO, "CPU #%d: %.2f H/s", thr_id, thr_hashrates[thr_id]);
 				break;
 			default:
 				sprintf(s, thr_hashrates[thr_id] >= 1e6 ? "%.0f" : "%.2f",
@@ -2531,6 +2530,7 @@ static void *miner_thread(void *userdata)
 			}
 			tm_rate_log = time(NULL);
 		}
+
 		if (opt_benchmark && thr_id == opt_n_threads - 1) {
 			double hashrate = 0.;
 			for (i = 0; i < opt_n_threads && thr_hashrates[i]; i++)
@@ -3042,8 +3042,6 @@ void parse_arg(int key, char *arg)
 				i = opt_algo = ALGO_BITCORE;
 			else if (!strcasecmp("ziftr", arg))
 				i = opt_algo = ALGO_ZR5;
-			else if (!strcasecmp("curve-zpool", arg))
-				i = opt_algo = ALGO_CURVE, opt_diff_factor = 67866;
 			else
 				applog(LOG_ERR, "Unknown algo parameter '%s'", arg);
 		}

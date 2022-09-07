@@ -14,7 +14,6 @@ enum algos {
         ALGO_BMW,         /* BMW 256 */
         ALGO_BMW512,      /* BMW 512 [KONJ, XDN] */
         ALGO_C11,         /* C11 Chaincoin/Flaxcoin X11 variant */
-        ALGO_CPUPOWER,    /* CPUchain */
         ALGO_CRYPTOLIGHT, /* cryptonight-light (Aeon) */
         ALGO_CRYPTONIGHT, /* CryptoNight */
 	ALGO_CURVE,       /* Curve coin */
@@ -31,7 +30,6 @@ enum algos {
         ALGO_LYRA2REV2,   /* Lyra2REv2 */
         ALGO_LYRA2V3,     /* Lyra2REv3 (Vertcoin) */
         ALGO_MYR_GR,      /* Myriad Groestl */
-        ALGO_M7M,         /* Magi */
         ALGO_MINOTAUR,     /* Ring */
         ALGO_MINOTAURX,    /* Ring, LCC */
         ALGO_NIST5,       /* Nist5 */
@@ -104,7 +102,6 @@ static const char *algo_names[] = {
         "blake2s",
         "bmw",
         "bmw512",
-        "cpupower",
         "c11",
 	"cryptolight",
         "cryptonight",
@@ -122,7 +119,6 @@ static const char *algo_names[] = {
         "lyra2rev2",
         "lyra2v3",
         "myr-gr",
-        "m7m",
         "minotaur",
         "minotaurx",
         "nist5",

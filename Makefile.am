@@ -71,7 +71,6 @@ cpuminer_SOURCES = \
   algo/bmw256.c \
   algo/bmw512.c \
   algo/c11.c \
-  algo/cpupower.c \
   algo/cryptonight.c \
   algo/cryptolight.c \
   algo/curvehash.c \
