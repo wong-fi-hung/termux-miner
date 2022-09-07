@@ -3726,7 +3726,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	applog(LOG_INFO, CL_LYL "%d " CL_LGR "miner threads started, "
-		"using " CL_LYL "'%s'" CL_LGR" algorithm.",
+		"using " CL_LYL "%s" CL_LGR" algorithm.",
 		opt_n_threads,
 		algo_names[opt_algo]);
 
