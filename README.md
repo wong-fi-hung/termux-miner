@@ -26,7 +26,6 @@ Algorithms
  * ✓ __scryptn11__ (Fujicoin [FUJI])
  * ✓ __scryptjane:N__
  * ✓ __sha256d__ (Bitcoin, Freicoin, Peercoin/PPCoin, Terracoin, ...)
- * ✓ __argon2__
  * ✓ __allium__ (Garlicoin, Tuxcoin)
  * ✓ __axiom__ (Axiom Shabal-256 based MemoHash)
  * ✓ __bastion__ (Joincoin [J])
@@ -36,7 +35,7 @@ Algorithms
  * ✓ __blake2b__ (Not SIA one)
  * ✓ __bmw__ (Midnight [MDT] BMW-256)
  * ✓ __bmw512__ (XDN [Digitalnote] KONJ [Konjungate] BMW-512 Bits)
- * ✓ __cpupower__ (CPUchain [CPU])
+ *  ^|^s __curve__ (Curvehash, Pulsarcoin)
  * ✓ __cryptonight__ (Bytecoin [BCN], MoneroClassic [XMC])
  * ✓ __cryptonight-light__ (Aeon)
  * ✓ __decred__ (Blake256-14 [DCR])
