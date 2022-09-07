@@ -2850,7 +2850,7 @@ static void *stratum_thread(void *userdata)
 				if (!opt_quiet && last_bloc_height != stratum.bloc_height) {
 					last_bloc_height = stratum.bloc_height;
 					if (net_diff > 0.)
-						applog(LOG_BLUE, "%s block %d, diff %.3f", algo_names[opt_algo],
+						applog(LOG_BLUE, "%s block %d, diff %.8f", algo_names[opt_algo],
 							stratum.bloc_height, net_diff);
 					else
 						applog(LOG_BLUE, "%s %s block %d", short_url, algo_names[opt_algo],
