@@ -18,7 +18,7 @@ static void show_credits()
         printf(CL_LCY"  Youtube Channel"CL_LYL"    : CHANNEL CRYPTO\n");
         printf(CL_LCY"  Git repo"CL_LYL"           : https:" "/" "/" "github.com" "/" "maribun20" "/" "termux-miner\n");
         printf(CL_LCY"  Original git repo"CL_LYL"  : https:" "/" "/" "github.com" "/" "tpruvot" "/" "cpuminer-multi\n");
-        printf(CL_LCY"  DOGE donation addr"CL_LYL" : DN54hE4GVCyQ68jEvHMF1UBykdFBowcKCC (maribun20)\n");
+        printf(CL_LCY"  DOGE donation addr"CL_LYL" : DFnEipdeXYkUnvSby8pQ7jr8WJhQ4Rj9is (maribun20)\n");
         printf(CL_LCY"  BTC donation addr "CL_LYL" : 1FhDPLPpw18X4srecguG3MxJYe4a1JsZnd (tpruvot)\n");
         printf(CL_N"######################################################################\n");
 }
