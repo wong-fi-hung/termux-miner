@@ -13,4 +13,3 @@ fi
 which autoreconf >/dev/null || \
   (echo "configuration failed, please install autoconf first" && exit 1)
 autoreconf --install --force --warnings=all
-gcc help.c -o help
