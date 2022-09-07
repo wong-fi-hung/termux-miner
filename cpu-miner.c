@@ -1049,7 +1049,7 @@ static int share_result(int result, struct work *work, const char *reason)
 			case ALGO_YESPOWERSUGAR:
 			case ALGO_YESPOWERURX:
 		sprintf(yes_pwr, "%.2f%%", 100. * accepted_count / (accepted_count + rejected_count));
-		applog(LOG_NOTICE, "%s" CL_WHT ": [%lu]:[" CL_RED "%lu" CL_WHT"] %s, %s %sH/s",
+		applog(LOG_NOTICE, "%s" CL_WHT ": [%lu]:[" CL_RED "%lu" CL_WHT"] (%s), %s %sH/s",
 			flag, accepted_count, rejected_count,
 			yes_pwr, hr, hr_units);
 		break;
