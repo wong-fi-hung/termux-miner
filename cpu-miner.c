@@ -1038,21 +1038,6 @@ static int share_result(int result, struct work *work, const char *reason)
 		sprintf(suppl, "%.2f%%", 100. * accepted_count / (accepted_count + rejected_count));
 
 	switch (opt_algo) {
-			case ALGO_POWER2B:
-			case ALGO_YESPOWER:
-			case ALGO_YESPOWERR16:
-			case ALGO_YESPOWERIC:
-			case ALGO_YESPOWERIOTS:
-			case ALGO_YESPOWERITC:
-			case ALGO_YESPOWERLITB:
-			case ALGO_YESPOWERLNC:
-			case ALGO_YESPOWERSUGAR:
-			case ALGO_YESPOWERURX:
-		sprintf(yes_pwr, "%.2f%%", 100. * accepted_count / (accepted_count + rejected_count));
-		applog(LOG_NOTICE, "%s" CL_WHT ": [%lu]:[" CL_RED "%lu" CL_WHT"] (%s), %s %sH/s",
-			flag, accepted_count, rejected_count,
-			yes_pwr, hr, hr_units);
-		break;
 	default:
 		applog(LOG_NOTICE, "%s" CL_WHT ": [%lu]:[" CL_RED "%lu" CL_WHT"] %s, %s %sH/s",
 			flag, accepted_count, rejected_count,

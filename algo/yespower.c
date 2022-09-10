@@ -40,335 +40,291 @@
 
 /* ALGO LISTS */
 
+/* yespower default*/
+
 void yespower_hash( const char *input, char *output, uint32_t len )
 {
-   {
-        static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
-        yespower_tls( (yespower_binary_t*)input, len, &v1, (yespower_binary_t*)output );
-        }
+    static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
+    yespower_tls( (yespower_binary_t*)input, len, &v1, (yespower_binary_t*)output );
+    static yespower_params_t params = {
+        .version = YESPOWER_1_0,
+        .N = 2048,
+        .r = 32,
+        .pers = NULL,
+        .perslen = 0
+    };
+    yespower_tls( (yespower_binary_t*)input, len, &params, (yespower_binary_t*)output );
 }
 
-/* yespower default */
-
-int scanhash_yespower(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done)
+int scanhash_yespower( int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done )
 {
-	static const yespower_params_t params = {
-		.version = YESPOWER_1_0,
-		.N = 2048,
-		.r = 32,
-		.pers = NULL,
-		.perslen = 0
-	};
-
-	uint32_t *pdata = work->data;
-        uint32_t *ptarget = work->target;
-        const uint32_t Htarg = ptarget[7];
-        const uint32_t first_nonce = pdata[19] - 1;
-        uint32_t n = first_nonce;
-
-	union {
-		uint8_t u8[8];
-		uint32_t u32[20];
-	} data;
-	union {
-		yespower_binary_t yb;
-		uint32_t u32[7];
-	} hash;
-
-	int i;
-
-	for (i = 0; i < 19; i++)
-		be32enc(&data.u32[i], pdata[i]);
-
-	do {
-		be32enc(&data.u32[19], ++n);
-
-		if (yespower_tls(data.u8, 80, &params, &hash.yb))
-			abort();
-
-		if (le32dec(&hash.u32[7]) <= Htarg) {
-			for (i = 0; i < 7; i++)
-				hash.u32[i] = le32dec(&hash.u32[i]);
-			if (Htarg && fulltest(hash.u32, ptarget)) {
-				*hashes_done = n - pdata[19] + 1;
-				pdata[19] = n;
-				return 1;
-			}
-		}
-	} while (n < max_nonce && !work_restart[thr_id].restart);
-
-	*hashes_done = n - pdata[19] + 1;
-	pdata[19] = n;
-	return 0;
-}
-
-/* yespowerIC */
-
-int scanhash_yespowerIC(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done)
-{
-        static const yespower_params_t params = {
-                .version = YESPOWER_1_0,
-                .N = 2048,
-                .r = 32,
-                .pers = (const uint8_t *)"IsotopeC",
-                .perslen = 8
-        };
-
+        uint32_t _ALIGN(64) vhash[8];
+        uint32_t _ALIGN(64) endiandata[20];
         uint32_t *pdata = work->data;
         uint32_t *ptarget = work->target;
+
         const uint32_t Htarg = ptarget[7];
-        const uint32_t first_nonce = pdata[19] - 1;
+        const uint32_t first_nonce = pdata[19];
         uint32_t n = first_nonce;
 
-        union {
-                uint8_t u8[8];
-                uint32_t u32[20];
-        } data;
-        union {
-                yespower_binary_t yb;
-                uint32_t u32[7];
-        } hash;
-
-        int i;
-
-        for (i = 0; i < 19; i++)
-                be32enc(&data.u32[i], pdata[i]);
+        for (int k = 0; k < 19; k++)
+                be32enc(&endiandata[k], pdata[k]);
 
         do {
-                be32enc(&data.u32[19], ++n);
-
-                if (yespower_tls(data.u8, 80, &params, &hash.yb))
-                        abort();
-
-                if (le32dec(&hash.u32[7]) <= Htarg) {
-                        for (i = 0; i < 7; i++)
-                                hash.u32[i] = le32dec(&hash.u32[i]);
-                        if (Htarg && fulltest(hash.u32, ptarget)) {
-                                *hashes_done = n - first_nonce + 1;
-                                pdata[19] = n;
-                                return 1;
-                        }
+                be32enc(&endiandata[19], n);
+                yespower_hash((char*) endiandata, (char*) vhash, 80);
+                if (vhash[7] < Htarg && fulltest(vhash, ptarget)) {
+                        work_set_target_ratio( work, vhash );
+                        *hashes_done = n - first_nonce + 1;
+                        pdata[19] = n;
+                        return true;
                 }
+                n++;
         } while (n < max_nonce && !work_restart[thr_id].restart);
 
         *hashes_done = n - first_nonce + 1;
         pdata[19] = n;
+
+        return 0;
+}
+
+/* yespowerIC */
+
+void yespowerIC_hash( const char *input, char *output, uint32_t len )
+{
+    static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
+    yespower_tls( (yespower_binary_t*)input, len, &v1, (yespower_binary_t*)output );
+    static yespower_params_t params = {
+        .version = YESPOWER_1_0,
+        .N = 2048,
+        .r = 32,
+        .pers = (const uint8_t *)"IsotopeC",
+        .perslen = 8
+    };
+    yespower_tls( (yespower_binary_t*)input, len, &params, (yespower_binary_t*)output );
+}
+
+int scanhash_yespowerIC( int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done )
+{
+        uint32_t _ALIGN(64) vhash[8];
+        uint32_t _ALIGN(64) endiandata[20];
+        uint32_t *pdata = work->data;
+        uint32_t *ptarget = work->target;
+
+        const uint32_t Htarg = ptarget[7];
+        const uint32_t first_nonce = pdata[19];
+        uint32_t n = first_nonce;
+
+        for (int k = 0; k < 19; k++)
+                be32enc(&endiandata[k], pdata[k]);
+
+        do {
+                be32enc(&endiandata[19], n);
+                yespowerIC_hash((char*) endiandata, (char*) vhash, 80);
+                if (vhash[7] < Htarg && fulltest(vhash, ptarget)) {
+                        work_set_target_ratio( work, vhash );
+                        *hashes_done = n - first_nonce + 1;
+                        pdata[19] = n;
+                        return true;
+                }
+                n++;
+        } while (n < max_nonce && !work_restart[thr_id].restart);
+
+        *hashes_done = n - first_nonce + 1;
+        pdata[19] = n;
+
         return 0;
 }
 
 /* yespowerIOTS */
 
-int scanhash_yespowerIOTS(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done)
+void yespowerIOTS_hash( const char *input, char *output, uint32_t len )
 {
-        static const yespower_params_t params = {
-                .version = YESPOWER_1_0,
-                .N = 2048,
-                .r = 32,
-                .pers = (const uint8_t *)"Iots is committed to the development of IOT",
-                .perslen = 43
-        };
+    static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
+    yespower_tls( (yespower_binary_t*)input, len, &v1, (yespower_binary_t*)output );
+    static yespower_params_t params = {
+        .version = YESPOWER_1_0,
+        .N = 2048,
+        .r = 32,
+        .pers = (const uint8_t *)"Iots is committed to the development of IOT",
+        .perslen = 43
+    };
+    yespower_tls( (yespower_binary_t*)input, len, &params, (yespower_binary_t*)output );
+}
 
+int scanhash_yespowerIOTS( int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done )
+{
+        uint32_t _ALIGN(64) vhash[8];
+        uint32_t _ALIGN(64) endiandata[20];
         uint32_t *pdata = work->data;
         uint32_t *ptarget = work->target;
+
         const uint32_t Htarg = ptarget[7];
-        const uint32_t first_nonce = pdata[19] - 1;
+        const uint32_t first_nonce = pdata[19];
         uint32_t n = first_nonce;
 
-        union {
-                uint8_t u8[8];
-                uint32_t u32[20];
-        } data;
-        union {
-                yespower_binary_t yb;
-                uint32_t u32[7];
-        } hash;
-
-        int i;
-
-        for (i = 0; i < 19; i++)
-                be32enc(&data.u32[i], pdata[i]);
+        for (int k = 0; k < 19; k++)
+                be32enc(&endiandata[k], pdata[k]);
 
         do {
-                be32enc(&data.u32[19], ++n);
-
-                if (yespower_tls(data.u8, 80, &params, &hash.yb))
-                        abort();
-
-                if (le32dec(&hash.u32[7]) <= Htarg) {
-                        for (i = 0; i < 7; i++)
-                                hash.u32[i] = le32dec(&hash.u32[i]);
-                        if (Htarg && fulltest(hash.u32, ptarget)) {
-                                *hashes_done = n - first_nonce + 1;
-                                pdata[19] = n;
-                                return 1;
-                        }
+                be32enc(&endiandata[19], n);
+                yespowerIOTS_hash((char*) endiandata, (char*) vhash, 80);
+                if (vhash[7] < Htarg && fulltest(vhash, ptarget)) {
+                        work_set_target_ratio( work, vhash );
+                        *hashes_done = n - first_nonce + 1;
+                        pdata[19] = n;
+                        return true;
                 }
+                n++;
         } while (n < max_nonce && !work_restart[thr_id].restart);
 
         *hashes_done = n - first_nonce + 1;
         pdata[19] = n;
+
         return 0;
 }
 
 /* yespowerITC*/
 
-int scanhash_yespowerITC(int thr_id, struct work * work, uint32_t max_nonce, uint64_t *hashes_done)
+void yespowerITC_hash( const char *input, char *output, uint32_t len )
 {
-        static const yespower_params_t params = {
-                .version = YESPOWER_1_0,
-                .N = 2048,
-                .r = 32,
-                .pers = (const uint8_t *)"InterITC",
-                .perslen = 8
-        };
+    static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
+    yespower_tls( (yespower_binary_t*)input, len, &v1, (yespower_binary_t*)output );
+    static yespower_params_t params = {
+        .version = YESPOWER_1_0,
+        .N = 2048,
+        .r = 32,
+        .pers = (const uint8_t *)"InterITC",
+        .perslen = 8
+    };
+    yespower_tls( (yespower_binary_t*)input, len, &params, (yespower_binary_t*)output );
+}
 
+int scanhash_yespowerITC( int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done )
+{
+        uint32_t _ALIGN(64) vhash[8];
+        uint32_t _ALIGN(64) endiandata[20];
         uint32_t *pdata = work->data;
         uint32_t *ptarget = work->target;
+
         const uint32_t Htarg = ptarget[7];
-        const uint32_t first_nonce = pdata[19] - 1;
+        const uint32_t first_nonce = pdata[19];
         uint32_t n = first_nonce;
 
-        union {
-                uint8_t u8[8];
-                uint32_t u32[20];
-        } data;
-        union {
-                yespower_binary_t yb;
-                uint32_t u32[7];
-        } hash;
-
-        int i;
-
-        for (i = 0; i < 19; i++)
-                be32enc(&data.u32[i], pdata[i]);
+        for (int k = 0; k < 19; k++)
+                be32enc(&endiandata[k], pdata[k]);
 
         do {
-                be32enc(&data.u32[19], ++n);
-
-                if (yespower_tls(data.u8, 80, &params, &hash.yb))
-                        abort();
-
-                if (le32dec(&hash.u32[7]) <= Htarg) {
-                        for (i = 0; i < 7; i++)
-                                hash.u32[i] = le32dec(&hash.u32[i]);
-                        if (Htarg && fulltest(hash.u32, ptarget)) {
-                                *hashes_done = n - first_nonce + 1;
-                                pdata[19] = n;
-                                return 1;
-                        }
+                be32enc(&endiandata[19], n);
+                yespowerITC_hash((char*) endiandata, (char*) vhash, 80);
+                if (vhash[7] < Htarg && fulltest(vhash, ptarget)) {
+                        work_set_target_ratio( work, vhash );
+                        *hashes_done = n - first_nonce + 1;
+                        pdata[19] = n;
+                        return true;
                 }
+                n++;
         } while (n < max_nonce && !work_restart[thr_id].restart);
 
         *hashes_done = n - first_nonce + 1;
         pdata[19] = n;
+
         return 0;
 }
 
 /* yespowerLITB */
 
-int scanhash_yespowerLITB(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done)
+void yespowerLITB_hash( const char *input, char *output, uint32_t len )
 {
-        static const yespower_params_t params = {
-                .version = YESPOWER_1_0,
-                .N = 2048,
-                .r = 32,
-                .pers = (const uint8_t *)"LITBpower: The number of LITB working or available for proof-of-work mining",
-                .perslen = 73
-        };
+    static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
+    yespower_tls( (yespower_binary_t*)input, len, &v1, (yespower_binary_t*)output );
+    static yespower_params_t params = {
+        .version = YESPOWER_1_0,
+        .N = 2048,
+        .r = 32,
+        .pers = (const uint8_t *)"LITBpower: The number of LITB working or available for proof-of-work mining",
+        .perslen = 73
+    };
+    yespower_tls( (yespower_binary_t*)input, len, &params, (yespower_binary_t*)output );
+}
 
+int scanhash_yespowerLITB( int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done )
+{
+        uint32_t _ALIGN(64) vhash[8];
+        uint32_t _ALIGN(64) endiandata[20];
         uint32_t *pdata = work->data;
         uint32_t *ptarget = work->target;
+
         const uint32_t Htarg = ptarget[7];
-        const uint32_t first_nonce = pdata[19] - 1;
+        const uint32_t first_nonce = pdata[19];
         uint32_t n = first_nonce;
 
-        union {
-                uint8_t u8[8];
-                uint32_t u32[20];
-        } data;
-        union {
-                yespower_binary_t yb;
-                uint32_t u32[7];
-        } hash;
-
-        int i;
-
-        for (i = 0; i < 19; i++)
-                be32enc(&data.u32[i], pdata[i]);
+        for (int k = 0; k < 19; k++)
+                be32enc(&endiandata[k], pdata[k]);
 
         do {
-                be32enc(&data.u32[19], ++n);
-
-                if (yespower_tls(data.u8, 80, &params, &hash.yb))
-                        abort();
-
-                if (le32dec(&hash.u32[7]) <= Htarg) {
-                        for (i = 0; i < 7; i++)
-                                hash.u32[i] = le32dec(&hash.u32[i]);
-                        if (Htarg && fulltest(hash.u32, ptarget)) {
-                                *hashes_done = n - first_nonce + 1;
-                                pdata[19] = n;
-                                return 1;
-                        }
+                be32enc(&endiandata[19], n);
+                yespowerLITB_hash((char*) endiandata, (char*) vhash, 80);
+                if (vhash[7] < Htarg && fulltest(vhash, ptarget)) {
+                        work_set_target_ratio( work, vhash );
+                        *hashes_done = n - first_nonce + 1;
+                        pdata[19] = n;
+                        return true;
                 }
+                n++;
         } while (n < max_nonce && !work_restart[thr_id].restart);
 
         *hashes_done = n - first_nonce + 1;
         pdata[19] = n;
+
         return 0;
 }
 
 /* yespowerLNC */
 
-int scanhash_yespowerLNC(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done)
+void yespowerLNC_hash( const char *input, char *output, uint32_t len )
 {
-        static const yespower_params_t params = {
-                .version = YESPOWER_1_0,
-                .N = 2048,
-                .r = 32,
-                .pers = "LTNCGYES",
-                .perslen = 8
-        };
+    static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
+    yespower_tls( (yespower_binary_t*)input, len, &v1, (yespower_binary_t*)output );
+    static yespower_params_t params = {
+        .version = YESPOWER_1_0,
+        .N = 2048,
+        .r = 32,
+        .pers = (const uint8_t *)"LTNCGYES",
+        .perslen = 8
+    };
+    yespower_tls( (yespower_binary_t*)input, len, &params, (yespower_binary_t*)output );
+}
 
+int scanhash_yespowerLNC( int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done )
+{
+        uint32_t _ALIGN(64) vhash[8];
+        uint32_t _ALIGN(64) endiandata[20];
         uint32_t *pdata = work->data;
         uint32_t *ptarget = work->target;
+
         const uint32_t Htarg = ptarget[7];
-        const uint32_t first_nonce = pdata[19] - 1;
+        const uint32_t first_nonce = pdata[19];
         uint32_t n = first_nonce;
 
-        union {
-                uint8_t u8[8];
-                uint32_t u32[20];
-        } data;
-        union {
-                yespower_binary_t yb;
-                uint32_t u32[7];
-        } hash;
-
-        int i;
-
-        for (i = 0; i < 19; i++)
-                be32enc(&data.u32[i], pdata[i]);
+        for (int k = 0; k < 19; k++)
+                be32enc(&endiandata[k], pdata[k]);
 
         do {
-                be32enc(&data.u32[19], ++n);
-
-                if (yespower_tls(data.u8, 80, &params, &hash.yb))
-                        abort();
-
-                if (le32dec(&hash.u32[7]) <= Htarg) {
-                        for (i = 0; i < 7; i++)
-                                hash.u32[i] = le32dec(&hash.u32[i]);
-                        if (Htarg && fulltest(hash.u32, ptarget)) {
-                                *hashes_done = n - first_nonce + 1;
-                                pdata[19] = n;
-                                return 1;
-                        }
+                be32enc(&endiandata[19], n);
+                yespowerLNC_hash((char*) endiandata, (char*) vhash, 80);
+                if (vhash[7] < Htarg && fulltest(vhash, ptarget)) {
+                        work_set_target_ratio( work, vhash );
+                        *hashes_done = n - first_nonce + 1;
+                        pdata[19] = n;
+                        return true;
                 }
+                n++;
         } while (n < max_nonce && !work_restart[thr_id].restart);
 
         *hashes_done = n - first_nonce + 1;
         pdata[19] = n;
+
         return 0;
 }
 
@@ -438,113 +394,109 @@ int scanhash_yespowerMGPC( int thr_id, struct work *work, uint32_t max_nonce, ui
 
 /* yespowerR16 */
 
-int scanhash_yespowerR16(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done)
+void yespowerR16_hash( const char *input, char *output, uint32_t len )
 {
-        static const yespower_params_t params = {
-                .version = YESPOWER_1_0,
-                .N = 4096,
-                .r = 16,
-                .pers = NULL,
-                .perslen = 0
-        };
+    static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
+    yespower_tls( (yespower_binary_t*)input, len, &v1, (yespower_binary_t*)output );
+    static yespower_params_t params = {
+        .version = YESPOWER_1_0,
+        .N = 4096,
+        .r = 16,
+        .pers = NULL,
+        .perslen = 0
+    };
+    yespower_tls( (yespower_binary_t*)input, len, &params, (yespower_binary_t*)output );
+}
 
+int scanhash_yespowerR16( int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done )
+{
+        uint32_t _ALIGN(64) vhash[8];
+        uint32_t _ALIGN(64) endiandata[20];
         uint32_t *pdata = work->data;
         uint32_t *ptarget = work->target;
+
         const uint32_t Htarg = ptarget[7];
-        const uint32_t first_nonce = pdata[19] - 1;
+        const uint32_t first_nonce = pdata[19];
         uint32_t n = first_nonce;
 
-        union {
-                uint8_t u8[8];
-                uint32_t u32[20];
-        } data;
-        union {
-                yespower_binary_t yb;
-                uint32_t u32[7];
-        } hash;
-
-        int i;
-
-        for (i = 0; i < 19; i++)
-                be32enc(&data.u32[i], pdata[i]);
+        for (int k = 0; k < 19; k++)
+                be32enc(&endiandata[k], pdata[k]);
 
         do {
-                be32enc(&data.u32[19], ++n);
-
-                if (yespower_tls(data.u8, 80, &params, &hash.yb))
-                        abort();
-
-                if (le32dec(&hash.u32[7]) <= Htarg) {
-                        for (i = 0; i < 7; i++)
-                                hash.u32[i] = le32dec(&hash.u32[i]);
-                        if (Htarg && fulltest(hash.u32, ptarget)) {
-                                *hashes_done = n - first_nonce + 1;
-                                pdata[19] = n;
-                                return 1;
-                        }
+                be32enc(&endiandata[19], n);
+                yespowerR16_hash((char*) endiandata, (char*) vhash, 80);
+                if (vhash[7] < Htarg && fulltest(vhash, ptarget)) {
+                        work_set_target_ratio( work, vhash );
+                        *hashes_done = n - first_nonce + 1;
+                        pdata[19] = n;
+                        return true;
                 }
+                n++;
         } while (n < max_nonce && !work_restart[thr_id].restart);
 
         *hashes_done = n - first_nonce + 1;
         pdata[19] = n;
+
         return 0;
 }
 
 /* yespowerSUGAR */
 
-int scanhash_yespowerSUGAR(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done)
+void yespowerSUGAR_hash( const char *input, char *output, uint32_t len )
 {
-        static const yespower_params_t params = {
-                .version = YESPOWER_1_0,
-                .N = 2048,
-                .r = 32,
-                .pers = (const uint8_t *)"Satoshi Nakamoto 31/Oct/2008 Proof-of-work is essentially one-CPU-one-vote",
-                .perslen = 74
-        };
+    static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
+    yespower_tls( (yespower_binary_t*)input, len, &v1, (yespower_binary_t*)output );
+    static yespower_params_t params = {
+        .version = YESPOWER_1_0,
+        .N = 2048,
+        .r = 32,
+        .pers = (const uint8_t *)"Satoshi Nakamoto 31/Oct/2008 Proof-of-work is essentially one-CPU-one-vote",
+        .perslen = 74
+    };
+    yespower_tls( (yespower_binary_t*)input, len, &params, (yespower_binary_t*)output );
+}
 
+int scanhash_yespowerSUGAR( int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done )
+{
+        uint32_t _ALIGN(64) vhash[8];
+        uint32_t _ALIGN(64) endiandata[20];
         uint32_t *pdata = work->data;
         uint32_t *ptarget = work->target;
+
         const uint32_t Htarg = ptarget[7];
-        const uint32_t first_nonce = pdata[19] - 1;
+        const uint32_t first_nonce = pdata[19];
         uint32_t n = first_nonce;
 
-        union {
-                uint8_t u8[8];
-                uint32_t u32[20];
-        } data;
-        union {
-                yespower_binary_t yb;
-                uint32_t u32[7];
-        } hash;
-
-        int i;
-
-        for (i = 0; i < 19; i++)
-                be32enc(&data.u32[i], pdata[i]);
+        for (int k = 0; k < 19; k++)
+                be32enc(&endiandata[k], pdata[k]);
 
         do {
-                be32enc(&data.u32[19], ++n);
-
-                if (yespower_tls(data.u8, 80, &params, &hash.yb))
-                        abort();
-
-                if (le32dec(&hash.u32[7]) <= Htarg) {
-                        for (i = 0; i < 7; i++)
-                                hash.u32[i] = le32dec(&hash.u32[i]);
-                        if (Htarg && fulltest(hash.u32, ptarget)) {
-                                *hashes_done = n - first_nonce + 1;
-                                pdata[19] = n;
-                                return 1;
-                        }
+                be32enc(&endiandata[19], n);
+                yespowerSUGAR_hash((char*) endiandata, (char*) vhash, 80);
+                if (vhash[7] < Htarg && fulltest(vhash, ptarget)) {
+                        work_set_target_ratio( work, vhash );
+                        *hashes_done = n - first_nonce + 1;
+                        pdata[19] = n;
+                        return true;
                 }
+                n++;
         } while (n < max_nonce && !work_restart[thr_id].restart);
 
         *hashes_done = n - first_nonce + 1;
         pdata[19] = n;
+
         return 0;
 }
 
 /* yespowerTIDE */
+
+void yespowerTIDE_hash( const char *input, char *output, uint32_t len )
+ {
+   {
+        static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
+        yespower_tls( (yespower_binary_t*)input, len, &v1, (yespower_binary_t*)output );
+        }
+}
 
 int scanhash_yespowerTIDE(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done )
 {
@@ -570,7 +522,7 @@ int scanhash_yespowerTIDE(int thr_id, struct work *work, uint32_t max_nonce, uin
 
         do {
                 be32enc(&endiandata[19], n);
-                yespower_hash((char*) endiandata, (char*) vhash, 80);
+                yespowerTIDE_hash((char*) endiandata, (char*) vhash, 80);
                 if (vhash[7] < Htarg && fulltest(vhash, ptarget)) {
                         work_set_target_ratio( work, vhash );
                         *hashes_done = n - first_nonce + 1;
@@ -588,54 +540,48 @@ int scanhash_yespowerTIDE(int thr_id, struct work *work, uint32_t max_nonce, uin
 
 /* yespowerURX */
 
-int scanhash_yespowerURX(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done)
+void yespowerURX_hash( const char *input, char *output, uint32_t len )
 {
-        static const yespower_params_t params = {
-                .version = YESPOWER_1_0,
-                .N = 2048,
-                .r = 32,
-                .pers = (const uint8_t *)"UraniumX",
-                .perslen = 8
-        };
+    static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
+    yespower_tls( (yespower_binary_t*)input, len, &v1, (yespower_binary_t*)output );
+    static yespower_params_t params = {
+        .version = YESPOWER_1_0,
+        .N = 2048,
+        .r = 32,
+        .pers = (const uint8_t *)"UraniumX",
+        .perslen = 8
+    };
+    yespower_tls( (yespower_binary_t*)input, len, &params, (yespower_binary_t*)output );
+}
 
+int scanhash_yespowerURX( int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done )
+{
+        uint32_t _ALIGN(64) vhash[8];
+        uint32_t _ALIGN(64) endiandata[20];
         uint32_t *pdata = work->data;
         uint32_t *ptarget = work->target;
+
         const uint32_t Htarg = ptarget[7];
-        const uint32_t first_nonce = pdata[19] - 1;
+        const uint32_t first_nonce = pdata[19];
         uint32_t n = first_nonce;
 
-        union {
-                uint8_t u8[8];
-                uint32_t u32[20];
-        } data;
-        union {
-                yespower_binary_t yb;
-                uint32_t u32[7];
-        } hash;
-
-        int i;
-
-        for (i = 0; i < 19; i++)
-                be32enc(&data.u32[i], pdata[i]);
+        for (int k = 0; k < 19; k++)
+                be32enc(&endiandata[k], pdata[k]);
 
         do {
-                be32enc(&data.u32[19], ++n);
-
-                if (yespower_tls(data.u8, 80, &params, &hash.yb))
-                        abort();
-
-                if (le32dec(&hash.u32[7]) <= Htarg) {
-                        for (i = 0; i < 7; i++)
-                                hash.u32[i] = le32dec(&hash.u32[i]);
-                        if (Htarg && fulltest(hash.u32, ptarget)) {
-                                *hashes_done = n - first_nonce + 1;
-                                pdata[19] = n;
-                                return 1;
-                        }
+                be32enc(&endiandata[19], n);
+                yespowerURX_hash((char*) endiandata, (char*) vhash, 80);
+                if (vhash[7] < Htarg && fulltest(vhash, ptarget)) {
+                        work_set_target_ratio( work, vhash );
+                        *hashes_done = n - first_nonce + 1;
+                        pdata[19] = n;
+                        return true;
                 }
+                n++;
         } while (n < max_nonce && !work_restart[thr_id].restart);
 
         *hashes_done = n - first_nonce + 1;
         pdata[19] = n;
+
         return 0;
 }
