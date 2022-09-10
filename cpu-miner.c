@@ -2355,7 +2355,7 @@ static void *miner_thread(void *userdata)
 			rc = scanhash_pluck(thr_id,  &work, max_nonce, &hashes_done, scratchbuf, opt_pluck_n);
 			break;
 		case ALGO_POWER2B:
-			rc = scanhash_power2b(thr_id, work.data, work.target, max_nonce, &hashes_done);
+			rc = scanhash_power2b(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_QUARK:
 			rc = scanhash_quark(thr_id, &work, max_nonce, &hashes_done);

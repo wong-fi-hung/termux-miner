@@ -242,7 +242,7 @@ int scanhash_phi1612(int thr_id, struct work *work, uint32_t max_nonce, uint64_t
 int scanhash_phi2(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_pluck(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done,
 					unsigned char *scratchbuf, int N);
-int scanhash_power2b(int thr_id, uint32_t *pdata, const uint32_t *ptarget, uint32_t max_nonce, unsigned long *hashes_done);
+int scanhash_power2b(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_quark(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 void init_quarkhash_contexts();
 int scanhash_qubit(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
