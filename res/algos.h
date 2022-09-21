@@ -14,6 +14,7 @@ enum algos {
         ALGO_BMW,         /* BMW 256 */
         ALGO_BMW512,      /* BMW 512 [KONJ, XDN] */
         ALGO_C11,         /* C11 Chaincoin/Flaxcoin X11 variant */
+	ALGO_CPUPOWER,    /* CPUchain */
         ALGO_CRYPTOLIGHT, /* cryptonight-light (Aeon) */
         ALGO_CRYPTONIGHT, /* CryptoNight */
 	ALGO_CURVE,       /* Curve coin */
@@ -103,6 +104,7 @@ static const char *algo_names[] = {
         "bmw",
         "bmw512",
         "c11",
+	"cpupower",
 	"cryptolight",
         "cryptonight",
 	"curve",
