@@ -192,6 +192,7 @@ Options:\n\
                           bmw            BMW 256\n\
 			  bmw512         BMW 512 (KONJ & XDN)\n\
                           c11/flax       C11\n\
+                          cpupower       CPUchain\n\
                           cryptolight    Cryptonight-light\n\
                           cryptonight    Monero\n\
 			  curve          CURVE (default no diff factor)\n\
@@ -1046,7 +1047,7 @@ static int share_result(int result, struct work *work, const char *reason)
 	}
 
 	if (reason) {
-		applog(LOG_WARNING, "reject reason: %s", reason);
+		applog(LOG_WARNING, "reject reason: %s, on job: %s", reason, g_work.job_id);
 		if (0 && strncmp(reason, "low difficulty share", 20) == 0) {
 		opt_diff_factor = (opt_diff_factor * 2.0) / 3.0;
 		applog(LOG_WARNING, "factor reduced to : %0.2f", opt_diff_factor);
@@ -1790,6 +1791,7 @@ static void stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 		}
 
 		switch (opt_algo) {
+			case ALGO_CPUPOWER:
 			case ALGO_DROP:
 			case ALGO_JHA:
 			case ALGO_SCRYPT:
@@ -2158,6 +2160,7 @@ static void *miner_thread(void *userdata)
 			case ALGO_YESCRYPTR32:
 				max64 = 0xfff;
 				break;
+			case ALGO_CPUPOWER:
 			case ALGO_POWER2B:
 			case ALGO_YESPOWER:
 			case ALGO_YESPOWERR16:
@@ -2273,6 +2276,9 @@ static void *miner_thread(void *userdata)
 		case ALGO_BMW512:
 			rc = scanhash_bmw512(thr_id, &work, max_nonce, &hashes_done);
                         break;
+		case ALGO_CPUPOWER:
+			rc = scanhash_cpupower(thr_id, &work, max_nonce, &hashes_done);
+			break;
 		case ALGO_C11:
 			rc = scanhash_c11(thr_id, &work, max_nonce, &hashes_done);
 			break;
@@ -2837,15 +2843,17 @@ static void *stratum_thread(void *userdata)
 					if (net_diff > 0.)
 						applog(LOG_BLUE, "%s block %d, diff %.8f", algo_names[opt_algo],
 							stratum.bloc_height, net_diff);
-					else
-						applog(LOG_BLUE, "%s %s block %d", short_url, algo_names[opt_algo],
-							stratum.bloc_height);
-				}
-				restart_threads();
-			} else if (opt_debug && !opt_quiet) {
+					}
+
+				} else if (opt_debug && !opt_quiet) {
 					applog(LOG_BLUE, "%s asks job %lu for block %d", short_url,
 						strtoul(stratum.job.job_id, NULL, 16), stratum.bloc_height);
-			}
+				}
+
+				if (stratum.job.clean || g_work.job_id) {
+					applog(NEW_WORK, "Got new work, job: %s", g_work.job_id);
+					restart_threads();
+				}
 		}
 
 		if (!stratum_socket_full(&stratum, opt_timeout)) {
@@ -2861,7 +2869,7 @@ static void *stratum_thread(void *userdata)
 		if (!stratum_handle_method(&stratum, s))
 			stratum_handle_response(s);
 		free(s);
-	}
+}
 out:
 	return NULL;
 }
