@@ -602,7 +602,7 @@ void cpupower_hash( const char *input, char *output, uint32_t len )
     yespower_tls( (yespower_binary_t*)input, len, &params, (yespower_binary_t*)output );
 }
 
-int scanhash_cpupower( int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done )
+int scanhash_cpupower(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done)
 {
         uint32_t _ALIGN(64) vhash[8];
         uint32_t _ALIGN(64) endiandata[20];

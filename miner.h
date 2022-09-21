@@ -64,7 +64,6 @@ void *alloca (size_t);
 #ifdef HAVE_SYSLOG_H
 #include <syslog.h>
 #define LOG_BLUE 0x10 /* unique value */
-#define NEW_WORK 0xfffff
 #else
 enum {
 	LOG_ERR,
@@ -74,7 +73,6 @@ enum {
 	LOG_DEBUG,
 	/* custom notices */
 	LOG_BLUE = 0x10,
-	NEW_WORK,
 };
 #endif
 
