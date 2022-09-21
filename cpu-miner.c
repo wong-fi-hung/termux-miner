@@ -192,6 +192,7 @@ Options:\n\
                           bmw            BMW 256\n\
 			  bmw512         BMW 512 (KONJ & XDN)\n\
                           c11/flax       C11\n\
+                          cpupower       CPUchain\n\
                           cryptolight    Cryptonight-light\n\
                           cryptonight    Monero\n\
 			  curve          CURVE (default no diff factor)\n\
