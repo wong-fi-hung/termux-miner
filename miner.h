@@ -64,6 +64,7 @@ void *alloca (size_t);
 #ifdef HAVE_SYSLOG_H
 #include <syslog.h>
 #define LOG_BLUE 0x10 /* unique value */
+#define NEW_WORK 0xfffff
 #else
 enum {
 	LOG_ERR,
@@ -73,6 +74,7 @@ enum {
 	LOG_DEBUG,
 	/* custom notices */
 	LOG_BLUE = 0x10,
+	NEW_WORK,
 };
 #endif
 
@@ -215,6 +217,7 @@ int scanhash_blake2b(int thr_id, struct work *work, uint32_t max_nonce, uint64_t
 int scanhash_blake2s(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_bmw(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_bmw512(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
+int scanhash_cpupower(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_cryptolight(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_cryptonight(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_c11(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
