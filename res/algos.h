@@ -19,6 +19,7 @@ enum algos {
         ALGO_CRYPTONIGHT, /* CryptoNight */
 	ALGO_CURVE,       /* Curve coin */
         ALGO_DECRED,      /* Decred */
+	ALGO_DEDAL,       /* GlobalToken */
         ALGO_DMD_GR,      /* Diamond */
         ALGO_DROP,        /* Dropcoin */
         ALGO_FRESH,       /* Fresh */
@@ -109,6 +110,7 @@ static const char *algo_names[] = {
         "cryptonight",
 	"curve",
         "decred",
+	"dedal",
         "dmd-gr",
         "drop",
         "fresh",

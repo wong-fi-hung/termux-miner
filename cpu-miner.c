@@ -197,6 +197,7 @@ Options:\n\
                           cryptonight    Monero\n\
 			  curve          CURVE (default no diff factor)\n\
                           decred         Blake-256 14-rounds 180 bytes\n\
+                          dedal          GLT[Global Token]\n\
                           dmd-gr         Diamond-Groestl\n\
                           drop           Dropcoin\n\
                           fresh          Fresh\n\
@@ -1818,6 +1819,7 @@ static void stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 				break;
 			case ALGO_ALLIUM:
 			case ALGO_FRESH:
+			case ALGO_DEDAL:
 			case ALGO_DMD_GR:
 			case ALGO_GROESTL:
 			case ALGO_KECCAKC:
@@ -2176,6 +2178,7 @@ static void *miner_thread(void *userdata)
 				max64 = 499;
 				break;
 			case ALGO_ALLIUM:
+			case ALGO_DEDAL:
 			case ALGO_LYRA2:
 			case ALGO_LYRA2REV2:
 			case ALGO_LYRA2V3:
@@ -2293,6 +2296,9 @@ static void *miner_thread(void *userdata)
                         break;
 		case ALGO_DECRED:
 			rc = scanhash_decred(thr_id, &work, max_nonce, &hashes_done);
+			break;
+		case ALGO_DEDAL:
+			rc = scanhash_dedal(thr_id, &work, max_nonce &hashes_done);
 			break;
 		case ALGO_DROP:
 			rc = scanhash_drop(thr_id, &work, max_nonce, &hashes_done);
