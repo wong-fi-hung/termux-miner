@@ -183,6 +183,7 @@ Usage: ./"PROGRAMNAME " [OPTIONS]\n\
 Options:\n\
   -a, --algo=ALGO       specify the algorithm to use\n\
                           allium         Garlicoin double lyra2\n\
+                          anime          Animecoin[ANI]\n\
                           axiom          Shabal-256 MemoHash\n\
                           bitcore        Timetravel with 10 algos\n\
                           blake          Blake-256 14-rounds (SFR)\n\
@@ -211,6 +212,7 @@ Options:\n\
                           lyra2re        Lyra2RE\n\
                           lyra2rev2      Lyra2REv2\n\
                           lyra2v3        Lyra2REv3 (Vertcoin)\n\
+                          megabtx        Bitcore[BTX]\n\
                           myr-gr         Myriad-Groestl\n\
                           minotaur       Ring\n\
                           minotaurx      LCC\n\
@@ -235,6 +237,7 @@ Options:\n\
                           sib            X11 + gost (SibCoin)\n\
                           skein          Skein+Sha (Skeincoin)\n\
                           skein2         Double Skein (Woodcoin)\n\
+                          skunk          GlobalToken[GLT]\n\
                           sonoa          A series of 97 hashes from x17\n\
                           s3             S3\n\
                           timetravel     Timetravel (Machinecoin)\n\
@@ -1826,6 +1829,7 @@ static void stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 			case ALGO_LBRY:
 			case ALGO_LYRA2REV2:
 			case ALGO_LYRA2V3:
+			case ALGO_MEGABTX:
 			case ALGO_PHI2:
 			case ALGO_TIMETRAVEL:
 			case ALGO_BITCORE:
@@ -2178,11 +2182,13 @@ static void *miner_thread(void *userdata)
 				max64 = 499;
 				break;
 			case ALGO_ALLIUM:
+			case ALGO_ANIME:
 			case ALGO_DEDAL:
 			case ALGO_LYRA2:
 			case ALGO_LYRA2REV2:
 			case ALGO_LYRA2V3:
 			case ALGO_PHI1612:
+			case ALGO_MEGABTX:
 			case ALGO_PHI2:
 			case ALGO_TIMETRAVEL:
 			case ALGO_BITCORE:
@@ -2224,6 +2230,7 @@ static void *miner_thread(void *userdata)
 				break;
 			case ALGO_SKEIN:
 			case ALGO_SKEIN2:
+			case ALGO_SKUNK:
 				max64 = 0x7ffffLL;
 				break;
 			case ALGO_BLAKE:
@@ -2254,6 +2261,9 @@ static void *miner_thread(void *userdata)
 
 		case ALGO_ALLIUM:
 			rc = scanhash_allium(thr_id, &work, max_nonce, &hashes_done);
+			break;
+		case ALGO_ANIME:
+			rc = scanhash_anime(thr_id, &work, max_nonce, hashes_done);
 			break;
 		case ALGO_AXIOM:
 			rc = scanhash_axiom(thr_id, &work, max_nonce, &hashes_done);
@@ -2338,6 +2348,9 @@ static void *miner_thread(void *userdata)
 		case ALGO_LYRA2V3:
 			rc = scanhash_lyra2v3(thr_id, &work, max_nonce, &hashes_done);
 			break;
+		case ALGO_MEGABTX:
+			rc = scanhash_megabtx(thr_id, &work, max_nonce, &hashes_done);
+			break;
 		case ALGO_MINOTAUR:
 			rc = scanhash_minotaur(thr_id, &work, max_nonce, &hashes_done, false);
 			break;
@@ -2401,6 +2414,9 @@ static void *miner_thread(void *userdata)
 			break;
 		case ALGO_SKEIN2:
 			rc = scanhash_skein2(thr_id, &work, max_nonce, &hashes_done);
+			break;
+		case ALGO_SKUNK:
+			rc = scanhash_skunk(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_SONOA:
 			rc = scanhash_sonoa(thr_id, &work, max_nonce, &hashes_done);

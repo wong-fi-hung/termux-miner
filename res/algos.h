@@ -5,6 +5,7 @@ enum algos {
         ALGO_NEOSCRYPT,   /* NeoScrypt(128, 2, 1) with Salsa20/20 and ChaCha20/20 */
         ALGO_QUARK,       /* Quark */
         ALGO_ALLIUM,      /* Garlicoin double lyra2 */
+	ALGO_ANIME,       /* Animecoin */
         ALGO_AXIOM,       /* Shabal 256 Memohash */
         ALGO_BASTION,
         ALGO_BLAKE,       /* Blake 256 */
@@ -31,9 +32,10 @@ enum algos {
         ALGO_LYRA2,       /* Lyra2RE */
         ALGO_LYRA2REV2,   /* Lyra2REv2 */
         ALGO_LYRA2V3,     /* Lyra2REv3 (Vertcoin) */
+        ALGO_MEGABTX,     /* BitCore */
         ALGO_MYR_GR,      /* Myriad Groestl */
-        ALGO_MINOTAUR,     /* Ring */
-        ALGO_MINOTAURX,    /* Ring, LCC */
+        ALGO_MINOTAUR,    /* Ring */
+        ALGO_MINOTAURX,   /* Ring, LCC */
         ALGO_NIST5,       /* Nist5 */
         ALGO_PENTABLAKE,  /* Pentablake */
         ALGO_PHI1612,
@@ -50,6 +52,7 @@ enum algos {
         ALGO_SIB,         /* X11 + gost (Sibcoin) */
         ALGO_SKEIN,       /* Skein */
         ALGO_SKEIN2,      /* Double skein (Woodcoin) */
+	ALGO_SKUNK,       /* GlobalToken */
         ALGO_SONOA,
         ALGO_S3,          /* S3 */
         ALGO_TIMETRAVEL,  /* Timetravel-8 (Machinecoin) */
@@ -96,6 +99,7 @@ static const char *algo_names[] = {
         "neoscrypt",
         "quark",
         "allium",
+        "anime",
         "axiom",
         "bastion",
         "blake",
@@ -122,6 +126,7 @@ static const char *algo_names[] = {
         "lyra2re",
         "lyra2rev2",
         "lyra2v3",
+	"megabtx",
         "myr-gr",
         "minotaur",
         "minotaurx",
@@ -141,6 +146,7 @@ static const char *algo_names[] = {
         "sib",
         "skein",
         "skein2",
+        "skunk",
         "sonoa",
         "s3",
         "timetravel",

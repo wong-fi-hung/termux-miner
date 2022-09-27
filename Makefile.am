@@ -63,6 +63,7 @@ cpuminer_SOURCES = \
   yespower-1.0.1-power2b/blake2b.c \
   algo/0x10.c \
   algo/allium.c \
+  algo/anime.c \
   algo/axiom.c \
   algo/bastion.c \
   algo/blake.c \
@@ -88,6 +89,7 @@ cpuminer_SOURCES = \
   algo/lyra2re.c \
   algo/lyra2rev2.c \
   algo/lyra2v3.c \
+  algo/megabtx.c \
   algo/myr-groestl.c \
   algo/minotaur.c \
   algo/keccak.c \
@@ -108,6 +110,7 @@ cpuminer_SOURCES = \
   algo/sibcoin.c \
   algo/skein.c \
   algo/skein2.c \
+  algo/skunk.c \
   algo/sonoa.c \
   algo/s3.c \
   algo/bitcore.c \
