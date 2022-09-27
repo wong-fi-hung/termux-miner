@@ -2298,7 +2298,7 @@ static void *miner_thread(void *userdata)
 			rc = scanhash_decred(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_DEDAL:
-			rc = scanhash_dedal(thr_id, &work, max_nonce &hashes_done);
+			rc = scanhash_dedal(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_DROP:
 			rc = scanhash_drop(thr_id, &work, max_nonce, &hashes_done);
