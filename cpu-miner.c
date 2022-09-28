@@ -2263,7 +2263,7 @@ static void *miner_thread(void *userdata)
 			rc = scanhash_allium(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_ANIME:
-			rc = scanhash_anime(thr_id, &work, max_nonce, hashes_done);
+			rc = scanhash_anime(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_AXIOM:
 			rc = scanhash_axiom(thr_id, &work, max_nonce, &hashes_done);
