@@ -53,6 +53,16 @@ cpuminer_SOURCES = \
   crypto/c_skein.c \
   crypto/hash.c \
   crypto/aesb.c \
+  cryptonote/cryptonight.c \
+  cryptonote/cryptonight_dark.c \
+  cryptonote/cryptonight_dark_lite.c \
+  cryptonote/cryptonight_fast.c \
+  cryptonote/cryptonight_lite.c \
+  cryptonote/cryptonight_soft_shell.c \
+  cryptonote/cryptonight_turtle.c \
+  cryptonote/cryptonight_turtle_lite.c \
+  cryptonote/crypto/c_skein.c \
+  cryptonote/crypto/wild_keccak.cpp \
   lyra2/Lyra2.c lyra2/Sponge.c \
   yescrypt/yescrypt-common.c yescrypt/yescrypt-best.c \
   yescrypt/sha256_Y.c \
@@ -72,14 +82,13 @@ cpuminer_SOURCES = \
   algo/bmw256.c \
   algo/bmw512.c \
   algo/c11.c \
-  algo/cryptonight.c \
-  algo/cryptolight.c \
   algo/curvehash.c \
   algo/decred.c \
   algo/dedal.c \
   algo/drop.c \
   algo/fresh.c \
   algo/geek.c \
+  algo/gr.c \
   algo/groestl.c \
   algo/heavy.c \
   algo/ink.c \

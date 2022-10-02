@@ -1093,15 +1093,6 @@ static bool submit_upstream_work(CURL *curl, struct work *work)
 			uchar hash[32];
 
 			bin2hex(noncestr, (const unsigned char *)work->data + 39, 4);
-			switch(opt_algo) {
-			case ALGO_CRYPTOLIGHT:
-				cryptolight_hash(hash, work->data);
-				break;
-			case ALGO_CRYPTONIGHT:
-				cryptonight_hash(hash, work->data);
-			default:
-				break;
-			}
 			char *hashhex = abin2hex(hash, 32);
 			snprintf(s, JSON_BUF_LEN,
 					"{\"method\": \"submit\", \"params\": {\"id\": \"%s\", \"job_id\": \"%s\", \"nonce\": \"%s\", \"result\": \"%s\"}, \"id\":4}\r\n",
@@ -1227,15 +1218,6 @@ static bool submit_upstream_work(CURL *curl, struct work *work)
 
 			bin2hex(noncestr, (const unsigned char *)work->data + 39, 4);
 
-			switch(opt_algo) {
-			case ALGO_CRYPTOLIGHT:
-				cryptolight_hash(hash, work->data);
-				break;
-			case ALGO_CRYPTONIGHT:
-				cryptonight_hash(hash, work->data);
-			default:
-				break;
-			}
 			hashhex = abin2hex(&hash[0], 32);
 			snprintf(s, JSON_BUF_LEN,
 					"{\"method\": \"submit\", \"params\": "
@@ -1797,6 +1779,7 @@ static void stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 		switch (opt_algo) {
 			case ALGO_CPUPOWER:
 			case ALGO_DROP:
+			case ALGO_GR:
 			case ALGO_JHA:
 			case ALGO_SCRYPT:
 			case ALGO_SCRYPTJANE:
@@ -2149,12 +2132,11 @@ static void *miner_thread(void *userdata)
 					max64 = 0xF;
 				break;
 			case ALGO_AXIOM:
-			case ALGO_CRYPTOLIGHT:
-			case ALGO_CRYPTONIGHT:
 			case ALGO_SCRYPTJANE:
 				max64 = 0x40LL;
 				break;
 			case ALGO_DROP:
+			case ALGO_GR:
 			case ALGO_MINOTAUR:
 			case ALGO_MINOTAURX:
 			case ALGO_PLUCK:
@@ -2295,12 +2277,6 @@ static void *miner_thread(void *userdata)
 		case ALGO_CPUPOWER:
 			rc = scanhash_cpupower(thr_id, &work, max_nonce, &hashes_done);
 			break;
-		case ALGO_CRYPTOLIGHT:
-			rc = scanhash_cryptolight(thr_id, &work, max_nonce, &hashes_done);
-			break;
-		case ALGO_CRYPTONIGHT:
-			rc = scanhash_cryptonight(thr_id, &work, max_nonce, &hashes_done);
-			break;
 		case ALGO_CURVE:
 			rc = scanhash_curvehash(thr_id, &work, max_nonce, &hashes_done);
                         break;
@@ -2318,6 +2294,9 @@ static void *miner_thread(void *userdata)
 			break;
 		case ALGO_GEEK:
 			rc = scanhash_geek(thr_id, &work, max_nonce, &hashes_done);
+			break;
+		case ALGO_GR:
+			rc = scanhash_gr(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_DMD_GR:
 		case ALGO_GROESTL:
@@ -2543,8 +2522,6 @@ static void *miner_thread(void *userdata)
 		if (!opt_quiet && (time(NULL) - tm_rate_log) > opt_maxlograte) {
 			switch(opt_algo) {
 			case ALGO_AXIOM:
-			case ALGO_CRYPTOLIGHT:
-			case ALGO_CRYPTONIGHT:
 			case ALGO_PLUCK:
 			case ALGO_SCRYPTJANE:
 //			applog(LOG_INFO, "CPU #%d: %.2f H/s", thr_id, thr_hashrates[thr_id]);
@@ -2564,8 +2541,6 @@ static void *miner_thread(void *userdata)
 				hashrate += thr_hashrates[i];
 			if (i == opt_n_threads) {
 				switch(opt_algo) {
-				case ALGO_CRYPTOLIGHT:
-				case ALGO_CRYPTONIGHT:
 				case ALGO_AXIOM:
 				case ALGO_SCRYPTJANE:
 					sprintf(s, "%.3f", hashrate);
@@ -3036,8 +3011,6 @@ void parse_arg(int key, char *arg)
 			// some aliases...
 			if (!strcasecmp("blake2", arg))
 				i = opt_algo = ALGO_BLAKE2S;
-			else if (!strcasecmp("cryptonight-light", arg))
-				i = opt_algo = ALGO_CRYPTOLIGHT;
 			else if (!strcasecmp("flax", arg))
 				i = opt_algo = ALGO_C11;
 			else if (!strcasecmp("diamond", arg))
@@ -3052,8 +3025,6 @@ void parse_arg(int key, char *arg)
 				i = opt_algo = ALGO_LYRA2REV2;
 			else if (!strcasecmp("lyra2rev3", arg))
 				i = opt_algo = ALGO_LYRA2V3;
-			else if (!strcasecmp("monero", arg))
-				i = opt_algo = ALGO_CRYPTONIGHT;
 			else if (!strcasecmp("phi", arg))
 				i = opt_algo = ALGO_PHI1612;
 			else if (!strcasecmp("scryptjane", arg))
@@ -3560,14 +3531,6 @@ int main(int argc, char *argv[]) {
 
 	if (opt_algo == ALGO_QUARK) {
 		init_quarkhash_contexts();
-	} else if(opt_algo == ALGO_CRYPTONIGHT || opt_algo == ALGO_CRYPTOLIGHT) {
-		jsonrpc_2 = true;
-		opt_extranonce = false;
-		aes_ni_supported = has_aes_ni();
-		if (!opt_quiet) {
-			applog(LOG_INFO, "Using JSON-RPC 2.0");
-			applog(LOG_INFO, "CPU Supports AES-NI: %s", aes_ni_supported ? "YES" : "NO");
-		}
 	} else if(opt_algo == ALGO_DECRED || opt_algo == ALGO_SIA) {
 		have_gbt = false;
 	}

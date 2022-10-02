@@ -217,8 +217,6 @@ int scanhash_blake2s(int thr_id, struct work *work, uint32_t max_nonce, uint64_t
 int scanhash_bmw(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_bmw512(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_cpupower(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
-int scanhash_cryptolight(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
-int scanhash_cryptonight(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_c11(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_curvehash(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_decred(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
@@ -226,6 +224,7 @@ int scanhash_dedal(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *
 int scanhash_drop(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_fresh(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_geek(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
+int scanhash_gr(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_groestl(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_heavy(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_ink(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
@@ -546,9 +545,6 @@ void blake2s_hash(void *output, const void *input);
 void bmwhash(void *output, const void *input);
 void bmw512hash(void *output, const void *input);
 void c11hash(void *output, const void *input);
-void cryptolight_hash(void* output, const void* input);
-void cryptonight_hash(void* output, const void* input);
-void cryptonight_hash_v1(void* output, const void* input);
 void decred_hash(void *output, const void *input);
 void droplp_hash(void *output, const void *input);
 void groestlhash(void *output, const void *input);
