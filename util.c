@@ -2353,12 +2353,6 @@ void print_hash_tests(void)
 	c11hash(&hash[0], &buf[0]);
 	printpfx("c11", hash);
 
-	cryptolight_hash(&hash[0], &buf[0]);
-	printpfx("cryptolight", hash);
-
-	cryptonight_hash_v1(&hash[0], &buf[0]);
-	printpfx("cryptonight", hash);
-
 	decred_hash(&hash[0], &buf[0]);
 	printpfx("decred", hash);
 
@@ -2397,9 +2391,6 @@ void print_hash_tests(void)
 
 	lyra2v3_hash(&hash[0], &buf[0]);
 	printpfx("lyra2v3", hash);
-
-	cryptonight_hash(&hash[0], &buf[0]);
-	printpfx("cryptonight", hash);
 
 	minotaurhash(&hash[0], &buf[0], false);
 	printpfx("minotaur", hash);
