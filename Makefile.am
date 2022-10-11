@@ -100,6 +100,7 @@ cpuminer_SOURCES = \
   algo/lyra2v3.c \
   algo/megabtx.c \
   algo/myr-groestl.c \
+  algo/mike.c \
   algo/minotaur.c \
   algo/keccak.c \
   algo/pentablake.c \

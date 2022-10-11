@@ -33,6 +33,7 @@ enum algos {
 	ALGO_LYRA2V3,     /* Lyra2REv3 (Vertcoin) */
 	ALGO_MEGABTX,     /* BitCore */
 	ALGO_MYR_GR,      /* Myriad Groestl */
+	ALGO_MIKE,        /* Vkax */
 	ALGO_MINOTAUR,    /* Ring */
 	ALGO_MINOTAURX,   /* Ring, LCC */
 	ALGO_NIST5,       /* Nist5 */
@@ -126,6 +127,7 @@ static const char *algo_names[] = {
 	"lyra2v3",
 	"megabtx",
 	"myr-gr",
+	"mike",
 	"minotaur",
 	"minotaurx",
 	"nist5",

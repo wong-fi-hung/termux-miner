@@ -101,6 +101,7 @@ bool use_colors = true;
 static bool opt_background = false;
 bool opt_quiet = false;
 int opt_maxlograte = 5;
+bool show_hash_meter = false;
 bool opt_randomize = false;
 static int opt_retries = -1;
 static int opt_fail_pause = 10;
@@ -191,10 +192,10 @@ Options:\n\
                           blake2b        Blake2-B (512)\n\
                           blake2s        Blake2-S (256)\n\
                           bmw            BMW 256\n\
-			  bmw512         BMW 512 (KONJ & XDN)\n\
+                          bmw512         BMW 512 (KONJ & XDN)\n\
                           c11/flax       C11\n\
                           cpupower       CPUchain\n\
-			  curve          CURVE (default no diff factor)\n\
+                          curve          CURVE (default no diff factor)\n\
                           decred         Blake-256 14-rounds 180 bytes\n\
                           dedal          GLT[Global Token]\n\
                           dmd-gr         Diamond-Groestl\n\
@@ -219,15 +220,15 @@ Options:\n\
                           nist5          Nist5\n\
                           pluck          Pluck:128 (Supcoin)\n\
                           pentablake     Pentablake\n\
-			  power2b        MBC (Microbitc)\n\
+                          power2b        MBC (Microbitc)\n\
                           phi            LUX initial algo\n\
                           phi2           LUX newer algo\n\
                           quark          Quark\n\
                           qubit          Qubit\n\
                           rainforest     RainForest (256)\n\
                           scrypt         scrypt(1024, 1, 1) (default)\n\
-			  scryptn2       scrypt(1045678 for VRM [verium])\n\
-			  scryptn11      scrypt(2048 for [FUJI] Fujicoin)\n\
+                          scryptn2       scrypt(1045678 for VRM [verium])\n\
+                          scryptn11      scrypt(2048 for [FUJI] Fujicoin)\n\
                           scrypt:N       scrypt(N, 1, 1)\n\
                           scrypt-jane:N  (with N factor from 4 to 30)\n\
                           shavite3       Shavite3\n\
@@ -251,24 +252,24 @@ Options:\n\
                           x16rv2         X16Rv2 (Raven / Trivechain)\n\
                           x16s           X16S (Pigeon)\n\
                           x17            X17\n\
-			  0x10           0X10 (Chain0x [CHOX])\n\
+                          0x10           0X10 (Chain0x [CHOX])\n\
                           x20r           X20R\n\
                           xevan          Xevan (BitSend)\n\
                           yescrypt       Yescrypt for XMY, BSTY, and QBC\n\
                           yescryptR8     YescryptR8 for KOTO\n\
                           yescryptR16    YescryptR16 for GOLD[Goldcash], QOGE[Qogecoin]\n\
-			  yescryptR32    YescryptR32\n\
-			  yespower       yespower(default)\n\
-			  yespowerIC     ISO (IsotopeC)\n\
-			  yespowerIOTS   yespower based for iots device\n\
-			  yespowerITC    ITC (Intercoin)\n\
-			  yespowerLITB   LITB (Lightbit)\n\
-			  yespowerLNC    LTNCG (LightningCashGold)\n\
-			  yespowerMGPC   MGPC (Magpiecoin)\n\
-			  yespowerR16    YTN (Yenten)\n\
-			  yespowerSUGAR  SUGAR (Sugarchain)\n\
-			  yespowerTIDE   TDC (Tidecoin)\n\
-			  yespowerURX    URX (UraniumX)\n\
+                          yescryptR32    YescryptR32\n\
+                          yespower       yespower(default)\n\
+                          yespowerIC     ISO (IsotopeC)\n\
+                          yespowerIOTS   yespower based for iots device\n\
+                          yespowerITC    ITC (Intercoin)\n\
+                          yespowerLITB   LITB (Lightbit)\n\
+                          yespowerLNC    LTNCG (LightningCashGold)\n\
+                          yespowerMGPC   MGPC (Magpiecoin)\n\
+                          yespowerR16    YTN (Yenten)\n\
+                          yespowerSUGAR  SUGAR (Sugarchain)\n\
+                          yespowerTIDE   TDC (Tidecoin)\n\
+                          yespowerURX    URX (UraniumX)\n\
                           zr5            ZR5\n\
   -o, --url=URL           URL of mining server\n\
   -O, --userpass=U:P      username:password pair for mining server\n\
@@ -291,6 +292,7 @@ Options:\n\
       --coinbase-addr=ADDR payout address for solo mining\n\
       --coinbase-sig=TEXT  data to insert in the coinbase when possible\n\
       --max-log-rate       limit per-core hashrate logs (default: 5s)\n\
+      --show-hash-meter    Show hash meter output [ without this option, default to false ]\n\
       --no-longpoll        disable long polling support\n\
       --no-getwork         disable getwork support\n\
       --no-gbt             disable getblocktemplate support\n\
@@ -327,7 +329,7 @@ static char const short_options[] =
 #ifdef HAVE_SYSLOG_H
 	"S"
 #endif
-	"a:b:Bc:CDf:hm:n:p:Px:qr:R:s:t:T:o:u:O:V";
+	"a:b:Bc:CDf:Hhm:n:p:Px:qr:R:Ss:t:T:o:u:O:V";
 
 static struct option const options[] = {
 	{ "algo", 1, NULL, 'a' },
@@ -370,6 +372,7 @@ static struct option const options[] = {
 	{ "show-diff", 0, NULL, 1013 },
 	{ "hide-diff", 0, NULL, 1014 },
 	{ "max-log-rate", 1, NULL, 1019 },
+	{ "show-hash-meter", 0, NULL, 'H' },
 #ifdef HAVE_SYSLOG_H
 	{ "syslog", 0, NULL, 'S' },
 #endif
@@ -1780,6 +1783,7 @@ static void stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 			case ALGO_DROP:
 			case ALGO_GR:
 			case ALGO_JHA:
+			case ALGO_MIKE:
 			case ALGO_SCRYPT:
 			case ALGO_SCRYPTJANE:
 			case ALGO_NEOSCRYPT:
@@ -2136,6 +2140,7 @@ static void *miner_thread(void *userdata)
 				break;
 			case ALGO_DROP:
 			case ALGO_GR:
+			case ALGO_MIKE:
 			case ALGO_MINOTAUR:
 			case ALGO_MINOTAURX:
 			case ALGO_PLUCK:
@@ -2328,6 +2333,9 @@ static void *miner_thread(void *userdata)
 			break;
 		case ALGO_MEGABTX:
 			rc = scanhash_megabtx(thr_id, &work, max_nonce, &hashes_done);
+			break;
+		case ALGO_MIKE:
+			rc = scanhash_mike(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_MINOTAUR:
 			rc = scanhash_minotaur(thr_id, &work, max_nonce, &hashes_done, false);
@@ -2523,7 +2531,7 @@ static void *miner_thread(void *userdata)
 			case ALGO_AXIOM:
 			case ALGO_PLUCK:
 			case ALGO_SCRYPTJANE:
-//			applog(LOG_INFO, "CPU #%d: %.2f H/s", thr_id, thr_hashrates[thr_id]);
+//				applog(LOG_INFO, "CPU #%d: %.2f H/s", thr_id, thr_hashrates[thr_id]);
 				break;
 			default:
 				sprintf(s, thr_hashrates[thr_id] >= 1e6 ? "%.0f" : "%.2f",
@@ -2532,6 +2540,21 @@ static void *miner_thread(void *userdata)
 				break;
 			}
 			tm_rate_log = time(NULL);
+		}
+
+		if (show_hash_meter) {
+			int hashrate = thr_hashrates[thr_id];
+			if (hashrate < 1e3) {
+				applog(LOG_NOTICE, "CPU #%d: %.2f H/s", thr_id, hashrate);
+			} else if (hashrate < 1e6) {
+				applog(LOG_NOTICE, "CPU #%d: %.2f KH/s", thr_id, hashrate / 1e3);
+			} else if (hashrate < 1e9) {
+				applog(LOG_NOTICE, "CPU #%d: %.2f MH/s", thr_id, hashrate / 1e6);
+			} else if (hashrate < 1e12) {
+				applog(LOG_NOTICE, "CPU #%d: %.2f GH/s", thr_id, hashrate / 1e9);
+			} else {
+				applog(LOG_NOTICE, "CPU #%d: %.2f TH/s", thr_id, hashrate / 1e12);
+			}
 		}
 
 		if (opt_benchmark && thr_id == opt_n_threads - 1) {
@@ -3032,10 +3055,12 @@ void parse_arg(int key, char *arg)
 				i = opt_algo = ALGO_SIB;
 			else if (!strcasecmp("scryptn2", arg))
                                 i = opt_algo = ALGO_SCRYPT,
-				i = opt_scrypt_n = 1048576;
+				i = opt_scrypt_n = 1048576,
+				i = algo_names[opt_algo] = "scryptn2";
 			else if (!strcasecmp("scryptn11", arg))
                                 i = opt_algo = ALGO_SCRYPT,
-                                i = opt_scrypt_n = 2048;
+                                i = opt_scrypt_n = 2048,
+				i = algo_names[opt_algo] = "scryptn11";
 			else if (!strcasecmp("timetravel10", arg))
 				i = opt_algo = ALGO_BITCORE;
 			else if (!strcasecmp("ziftr", arg))
@@ -3144,6 +3169,9 @@ void parse_arg(int key, char *arg)
 		if (v < 1 || v > 9999) /* sanity check */
 			show_usage_and_exit(1);
 		opt_scantime = v;
+		break;
+	case 'H':
+		show_hash_meter = true;
 		break;
 	case 'T':
 		v = atoi(arg);

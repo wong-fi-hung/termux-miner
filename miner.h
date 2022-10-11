@@ -236,6 +236,7 @@ int scanhash_lyra2(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *
 int scanhash_lyra2rev2(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_lyra2v3(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_megabtx(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
+int scanhash_mike(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_minotaur(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done, bool minotaurX);
 int scanhash_myriad(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_neoscrypt(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done, uint32_t profile);
