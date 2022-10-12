@@ -1,4 +1,4 @@
-AC_INIT([termux-miner], [2.7.6])
+AC_INIT([termux-miner], [3.0.0])
 
 AC_PREREQ([2.59c])
 AC_CANONICAL_SYSTEM
