@@ -2543,7 +2543,7 @@ static void *miner_thread(void *userdata)
 		}
 
 		if (show_hash_meter) {
-			int hashrate = thr_hashrates[thr_id];
+			double hashrate = thr_hashrates[thr_id];
 			if (hashrate < 1e3) {
 				applog(LOG_NOTICE, "CPU #%d: %.2f H/s", thr_id, hashrate);
 			} else if (hashrate < 1e6) {
