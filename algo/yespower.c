@@ -489,30 +489,20 @@ int scanhash_yespowerSUGAR( int thr_id, struct work *work, uint32_t max_nonce, u
 }
 
 /* yespowerTIDE */
-
-void yespowerTIDE_hash( const char *input, char *output, uint32_t len )
+void yespowerTIDE_hash( const char *input, char *output, uint32_t len)
  {
-   {
-        static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
+     {
+	static const yespower_params_t v1 = {YESPOWER_1_0, 2048, 8, NULL, 0};
         yespower_tls( (yespower_binary_t*)input, len, &v1, (yespower_binary_t*)output );
-        }
-}
+     }
+ }
 
 int scanhash_yespowerTIDE(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done )
 {
-        static const yespower_params_t params = {
-                .version = YESPOWER_1_0,
-                .N = 2048,
-                .r = 8,
-                .pers = (const uint8_t *)"Tidecoin: Post Quantum Security.",
-                .perslen = 32
-        };
-
         uint32_t _ALIGN(64) vhash[8];
         uint32_t _ALIGN(64) endiandata[20];
         uint32_t *pdata = work->data;
         uint32_t *ptarget = work->target;
-
         const uint32_t Htarg = ptarget[7];
         const uint32_t first_nonce = pdata[19];
         uint32_t n = first_nonce;
