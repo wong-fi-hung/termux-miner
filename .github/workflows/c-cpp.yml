@@ -1,0 +1,21 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: autoreconf
+      run: autoreconf -i
+    - name: configure
+      run: ./configure --with-crypto --with-curl --disable-assembly
+    - name: make
+      run: make
