@@ -13,11 +13,5 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: apt
-      run: apt update; apt install git wget nano libcurl4-openssl-dev libssl-dev curl openssl automake autoconf build-essential cmake make m4 libtool autotools-dev -y
-    - name: autoreconf
-      run: autoreconf -i
-    - name: configure
-      run: ./configure --with-crypto --with-curl --disable-assembly
-    - name: make
-      run: make
+    - name: bash
+      run: bash
