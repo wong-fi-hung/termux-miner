@@ -2866,11 +2866,18 @@ static void *stratum_thread(void *userdata)
 						applog(LOG_BLUE, "%s %s block %d", short_url, algo_names[opt_algo],
 							stratum.bloc_height);
 				}
-				applog(LOG_INFO, CL_MAG "Got new work job: %s", g_work.job_id);
+				restart_threads();
+					if (opt_showdiff && !opt_quiet) {
+						applog(LOG_INFO, CL_MAG "Got new work job: %s", g_work.job_id);
+						restart_threads();
+					} else if (!opt_showdiff && opt_quiet) {
+						restart_threads();
+					}
 				restart_threads();
 			} else if (opt_debug && !opt_quiet) {
 					applog(LOG_BLUE, "%s asks job %lu for block %d", short_url,
 						strtoul(stratum.job.job_id, NULL, 16), stratum.bloc_height);
+						restart_threads();
 			}
 		}
 
