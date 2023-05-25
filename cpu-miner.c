@@ -2214,6 +2214,9 @@ static void *miner_thread(void *userdata)
 			case ALGO_PENTABLAKE:
 				max64 = 0x3ffff;
 				break;
+			case ALGO_MEME:
+				max64 = 0x9ffffLL;
+				break;
 			case ALGO_SKEIN:
 			case ALGO_SKEIN2:
 			case ALGO_SKUNK:
@@ -2333,6 +2336,9 @@ static void *miner_thread(void *userdata)
 			break;
 		case ALGO_MEGABTX:
 			rc = scanhash_megabtx(thr_id, &work, max_nonce, &hashes_done);
+			break;
+		case ALGO_MEME:
+			rc = scanhash_meme(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_MIKE:
 			rc = scanhash_mike(thr_id, &work, max_nonce, &hashes_done);
@@ -3072,6 +3078,8 @@ void parse_arg(int key, char *arg)
 				i = opt_algo = ALGO_BITCORE;
 			else if (!strcasecmp("ziftr", arg))
 				i = opt_algo = ALGO_ZR5;
+			else if (!strcasecmp("memehash", arg))
+				i = opt_algo = ALGO_MEME;
 			else
 				applog(LOG_ERR, "Unknown algo parameter '%s'", arg);
 		}

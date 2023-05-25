@@ -2350,6 +2350,9 @@ void print_hash_tests(void)
 	bmwhash(&hash[0], &buf[0]);
 	printpfx("bmw", hash);
 
+	bmw512_hash(&hash[0], buf[0]);
+	printpfx("bmw512", hash);
+
 	c11hash(&hash[0], &buf[0]);
 	printpfx("c11", hash);
 
@@ -2391,6 +2394,12 @@ void print_hash_tests(void)
 
 	lyra2v3_hash(&hash[0], &buf[0]);
 	printpfx("lyra2v3", hash);
+
+	megabtx_hash(&buf[0], hash[0], 80);
+	printpfx("megabtx", hash);
+
+	meme_hash(&buf[0], hash[0], 80);
+	printpfx("memehash" hash);
 
 	minotaurhash(&hash[0], &buf[0], false);
 	printpfx("minotaur", hash);
