@@ -10,7 +10,7 @@
 
 #include "sha3/sph_bmw.h"
 
-void bmw512hash(void *output, const void *input)
+void bmw512_hash(void *output, const void *input)
 {
 	uint32_t hash[32];
 	sph_bmw512_context ctx;
@@ -41,7 +41,7 @@ int scanhash_bmw512(int thr_id, struct work *work, uint32_t max_nonce, uint64_t 
 	do {
 		pdata[19] = ++n;
 		be32enc(&endiandata[19], n);
-		bmw512hash(hash64, endiandata);
+		bmw512_hash(hash64, endiandata);
 		if (((hash64[7]&0xFFFFFF00)==0) && fulltest(hash64, ptarget)) {
 			work_set_target_ratio(work, hash64);
 			*hashes_done = n - first_nonce + 1;
