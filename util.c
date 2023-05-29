@@ -2097,6 +2097,7 @@ bool stratum_handle_method(struct stratum_ctx *sctx, const char *s)
 	id = json_object_get(val, "id");
 
 	if (!strcasecmp(method, "mining.notify")) {
+		restart_threads();
 		ret = stratum_notify(sctx, params);
 		goto out;
 	}
@@ -2106,6 +2107,7 @@ bool stratum_handle_method(struct stratum_ctx *sctx, const char *s)
 		goto out;
 	}
 	if (!strcasecmp(method, "mining.set_difficulty")) {
+		restart_threads();
 		ret = stratum_set_difficulty(sctx, params);
 		goto out;
 	}
