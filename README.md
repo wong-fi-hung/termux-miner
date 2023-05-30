@@ -51,7 +51,7 @@ Algorithms
  * ✓ __lyra2REv2__
  * ✓ __lyra2REv3__ (VertCoin [VTC])
  * ✓ __megabtx__ (Bitcore [BTX])
- * ✓ __meme__ (memehash for PepePoW [PEPEW])
+ * ✓ __meme__ __or__ __memehash__ (memehash for PepePoW [PEPEW])
  * ✓ __myr-gr__ Myriad-Groestl (MyriadCoin [MYR])
  * ✓ __minotaur__ (Ring [RNG]) 
  * ✓ __minotaurx__ (Avian [AVN])
