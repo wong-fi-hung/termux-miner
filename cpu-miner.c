@@ -213,6 +213,7 @@ Options:\n\
                           lyra2rev2      Lyra2REv2\n\
                           lyra2v3        Lyra2REv3 (Vertcoin)\n\
                           megabtx        Bitcore[BTX]\n\
+                          memehash       PEPEW (PepePoW)\n\
                           myr-gr         Myriad-Groestl\n\
                           minotaur       Ring\n\
                           minotaurx      LCC\n\
