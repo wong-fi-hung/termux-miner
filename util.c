@@ -2401,7 +2401,7 @@ void print_hash_tests(void)
 	printpfx("megabtx", hash);
 
 	meme_hash(&buf[0], &hash[0], 80);
-	printpfx("memehash" hash);
+	printpfx("memehash", hash);
 
 	minotaurhash(&hash[0], &buf[0], false);
 	printpfx("minotaur", hash);
