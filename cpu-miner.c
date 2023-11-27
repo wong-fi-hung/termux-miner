@@ -3069,12 +3069,12 @@ void parse_arg(int key, char *arg)
 				i = opt_algo = ALGO_SIB;
 			else if (!strcasecmp("scryptn2", arg))
                                 i = opt_algo = ALGO_SCRYPT,
-				i = opt_scrypt_n = 1048576,
-				i = algo_names[opt_algo] = "scryptn2";
+				    opt_scrypt_n = 1048576,
+				    algo_names[opt_algo] = "scryptn2";
 			else if (!strcasecmp("scryptn11", arg))
-                                i = opt_algo = ALGO_SCRYPT,
-                                i = opt_scrypt_n = 2048,
-				i = algo_names[opt_algo] = "scryptn11";
+				i = opt_algo = ALGO_SCRYPT,
+				    opt_scrypt_n = 2048,
+				    algo_names[opt_algo] = "scryptn11";
 			else if (!strcasecmp("timetravel10", arg))
 				i = opt_algo = ALGO_BITCORE;
 			else if (!strcasecmp("ziftr", arg))
