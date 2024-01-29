@@ -1,0 +1,35 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]                                                                                   
+    pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: update
+      run: sudo apt update
+    - name: upgrade
+      run: sudo apt upgrade -y
+    - name: clean
+      run: sudo apt clean
+    - name: install_dependencies
+      run: sudo apt install git wget nano tmate build-essential make m4 libcurl4-openssl-dev libjansson-dev automake autoconf libtool autotools-dev cmake zlib1g-dev openssl libssl-dev -y
+    - name: clone_gitsource
+      run: cd && git clone https://github.com/wong-fi-hung/termux-miner && cd termux-miner
+    - name: generate_configure_script
+      run: autoreconf -i
+    - name: configuring
+      run: ./configure --with-crypto --with-curl
+    - name: Make
+      run: make -j4
+    - name: strip
+      run: strip -s cpuminer
+    - name: mktargz
+      run: mkdir termux-miner-v3.0.0; cp cpuminer cpuminer-conf.json termux-miner-v3.0.0; tar -Jcvf termux-miner-v3.0.0.tar.xz termux-miner-v3.0.0
