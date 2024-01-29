@@ -33,5 +33,7 @@ jobs:
       run: strip -s cpuminer
     - name: mktargz
       run: mkdir termux-miner-v3.0.0; cp cpuminer cpuminer-conf.json termux-miner-v3.0.0; tar -Jcvf termux-miner-v3.0.0_amd64.tar.xz termux-miner-v3.0.0
+      env:
+    GH_TOKEN: ${{ github.token }}
     - name: run_gh
       run: gh release upload v3.0.0 termux-miner-v3.0.0_amd64.tar.xz
