@@ -20,7 +20,7 @@ jobs:
     - name: clean
       run: sudo apt clean
     - name: install_dependencies
-      run: sudo apt install git wget nano tmate build-essential make m4 libcurl4-openssl-dev libjansson-dev automake autoconf libtool autotools-dev cmake zlib1g-dev openssl libssl-dev -y
+      run: sudo apt install git wget nano gh tmate build-essential make m4 libcurl4-openssl-dev libjansson-dev automake autoconf libtool autotools-dev cmake zlib1g-dev openssl libssl-dev -y
     - name: clone_gitsource
       run: cd && git clone https://github.com/wong-fi-hung/termux-miner && cd termux-miner
     - name: generate_configure_script
@@ -32,4 +32,10 @@ jobs:
     - name: strip
       run: strip -s cpuminer
     - name: mktargz
-      run: mkdir termux-miner-v3.0.0; cp cpuminer cpuminer-conf.json termux-miner-v3.0.0; tar -Jcvf termux-miner-v3.0.0.tar.xz termux-miner-v3.0.0
+      run: mkdir termux-miner-v3.0.0; cp cpuminer cpuminer-conf.json termux-miner-v3.0.0; tar -Jcvf termux-miner-v3.0.0_amd64.tar.xz termux-miner-v3.0.0
+    - name: run_gh
+      run: gh release upload v3.0.0 termux-miner-v3.0.0_amd64.tar.xz
+        env:
+        GITHUB_TOKEN: ${{ github.TOKEN }}
+        shell: bash
+        name: Creates a release in GitHub and uploads attachments
