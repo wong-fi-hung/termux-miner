@@ -2471,7 +2471,7 @@ void print_hash_tests(void)
 	sonoa_hash(&hash[0], &buf[0]);
 	printpfx("sonoa", hash);
 
-	skydoge_hash(&hash[0], &buf[0]);
+	skydoge_hash(&hash[0], &buf[0], 80);
 	printpfx("skydoge_hash", hash);
 
 	s3hash(&hash[0], &buf[0]);
