@@ -240,6 +240,7 @@ Options:\n\
                           skein2         Double Skein (Woodcoin)\n\
                           skunk          GlobalToken[GLT]\n\
                           sonoa          A series of 97 hashes from x17\n\
+                          skydoge        Skydoge hash\n\
                           s3             S3\n\
                           timetravel     Timetravel (Machinecoin)\n\
                           vanilla        Blake-256 8-rounds\n\
@@ -1787,6 +1788,7 @@ static void stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 			case ALGO_MIKE:
 			case ALGO_SCRYPT:
 			case ALGO_SCRYPTJANE:
+			case ALGO_SKYDOGE:
 			case ALGO_NEOSCRYPT:
 			case ALGO_POWER2B:
 			case ALGO_PLUCK:
@@ -2145,6 +2147,7 @@ static void *miner_thread(void *userdata)
 			case ALGO_MINOTAUR:
 			case ALGO_MINOTAURX:
 			case ALGO_PLUCK:
+			case ALGO_SKYDOGE:
 			case ALGO_YESCRYPT:
 			case ALGO_YESCRYPTR8:
 				max64 = 0x1ff;
@@ -2413,6 +2416,9 @@ static void *miner_thread(void *userdata)
 			break;
 		case ALGO_SONOA:
 			rc = scanhash_sonoa(thr_id, &work, max_nonce, &hashes_done);
+			break;
+		case ALGO_SKYDOGE:
+			rc = scanhash_skydoge(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_S3:
 			rc = scanhash_s3(thr_id, &work, max_nonce, &hashes_done);

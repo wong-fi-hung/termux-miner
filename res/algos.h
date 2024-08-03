@@ -55,6 +55,7 @@ enum algos {
 	ALGO_SKEIN2,      /* Double skein (Woodcoin) */
 	ALGO_SKUNK,       /* GlobalToken */
 	ALGO_SONOA,
+	ALGO_SKYDOGE,     /* Skydoge hash */
 	ALGO_S3,          /* S3 */
 	ALGO_TIMETRAVEL,  /* Timetravel-8 (Machinecoin) */
 	ALGO_BITCORE,     /* Timetravel-10 (Bitcore) */
@@ -150,6 +151,7 @@ static const char *algo_names[] = {
 	"skein2",
 	"skunk",
 	"sonoa",
+	"skydoge",
 	"s3",
 	"timetravel",
 	"bitcore",
