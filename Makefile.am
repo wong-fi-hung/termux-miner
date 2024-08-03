@@ -123,6 +123,7 @@ cpuminer_SOURCES = \
   algo/skein2.c \
   algo/skunk.c \
   algo/sonoa.c \
+  algo/skydoge.c \
   algo/s3.c \
   algo/bitcore.c \
   algo/timetravel.c \
