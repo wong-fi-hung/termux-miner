@@ -1592,7 +1592,6 @@ static inline void scrypt_core_3way(uint32_t B[32 * 3], uint32_t *V, uint32_t N)
 	scrypt_shuffle(&B[16 + 64]);
 }
 #else
-
 static inline void xor_salsa8(uint32_t B[16], const uint32_t Bx[16])
 {
 	uint32_t x00,x01,x02,x03,x04,x05,x06,x07,x08,x09,x10,x11,x12,x13,x14,x15;
