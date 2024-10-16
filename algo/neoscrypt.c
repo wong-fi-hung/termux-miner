@@ -40,14 +40,22 @@
 
 #ifdef _MSC_VER // todo: msvc
 #define ASM 0
-#elif defined(__arm__)
+#elif defined(__arm__) && defined(__aarch64__)
 #define ASM 0
 #endif
 
 #ifdef __GNUC__
-#if defined(NOASM) || defined(__arm__)
+#if defined(NOASM) || defined(__arm__) || defined(__aarch64__)
 #define ASM 0
 #else
+#define ASM 1
+#endif
+#endif
+
+#if __GNUC__
+#if defined(USE_ASM) || defined(__arm__) || defined(__aarch64__)
+#define ASM 0
+#elif defined(USE_ASM) || !defined(__arm__) || !defined(__aarch64__)
 #define ASM 1
 #endif
 #endif
