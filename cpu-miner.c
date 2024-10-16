@@ -1788,7 +1788,6 @@ static void stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 			case ALGO_MIKE:
 			case ALGO_SCRYPT:
 			case ALGO_SCRYPTJANE:
-			case ALGO_SKYDOGE:
 			case ALGO_NEOSCRYPT:
 			case ALGO_POWER2B:
 			case ALGO_PLUCK:
