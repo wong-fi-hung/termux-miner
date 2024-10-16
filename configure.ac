@@ -8,9 +8,6 @@ AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 
-dnl Libtool init checks.
-LT_INIT([pic-only])
-
 dnl Make sure anyone changing configure.ac/Makefile.am has a clue
 AM_MAINTAINER_MODE
 
@@ -50,7 +47,7 @@ case $MINGW_TARGET in
     have_arm=true
     ;;
   aarch64*-*-*)
-    have_arm=true
+    have_aarch64=true
     ;;
   i*86-*-mingw*)
     have_x86=true
@@ -137,6 +134,7 @@ AM_CONDITIONAL([USE_ASM], [test x$enable_assembly != xno])
 AM_CONDITIONAL([ARCH_x86], [test x$have_x86 = xtrue])
 AM_CONDITIONAL([ARCH_x86_64], [test x$have_x86_64 = xtrue])
 AM_CONDITIONAL([ARCH_ARM], [test x$have_arm = xtrue])
+AM_CONDITIONAL([ARCH_ARM64], [test x$have_aarch64 = xtrue])
 AM_CONDITIONAL([MINGW], [test "x$OS" = "xWindows_NT"])
 
 if test x$request_jansson = xtrue ; then
@@ -144,7 +142,7 @@ if test x$request_jansson = xtrue ; then
 else
 	JANSSON_LIBS=-ljansson
 fi
-SECP256K1_LIBS=-llibsecp256k1
+
 # libcurl install path (for mingw : --with-curl=/usr/local)
 AC_ARG_WITH([curl],
    [  --with-curl=PATH         prefix where curl is installed [default=/usr]])
