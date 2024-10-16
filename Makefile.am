@@ -158,6 +158,9 @@ endif
 if ARCH_ARM
    cpuminer_SOURCES += asm/sha2-arm.S asm/scrypt-arm.S
 endif
+if ARCH_ARM64
+   cpuminer_SOURCES += asm/sha2-arm.S asm/scrypt-arm.S
+endif
 else
    disable_flags += -DNOASM
 endif
@@ -165,7 +168,7 @@ endif
 if HAVE_WINDOWS
    cpuminer_SOURCES += compat/winansi.c
 endif
-LIBSECP256K1=secp256k1/libsecp256k1.la
+LIBSECP256K1=secp256k1/.libs/libsecp256k1.a
 $(LIBSECP256K1): $(wildcard secp256k1/src/*) $(wildcard secp256k1/include/*)
 	$(AM_V_at)$(MAKE) $(AM_MAKEFLAGS) -C $(@D) $(@F)
 cpuminer_LDFLAGS	= @LDFLAGS@
@@ -180,6 +183,10 @@ endif
 
 if ARCH_ARM
 cpuminer_CFLAGS += -D__arm__
+endif
+
+if ARCH_ARM64
+cpuminer_CFLAGS += -D__aarch64__
 endif
 
 if HAVE_WINDOWS
