@@ -256,6 +256,7 @@ Options:\n\
                           x17            X17\n\
                           0x10           0X10 (Chain0x [CHOX])\n\
                           x20r           X20R\n\
+                          xelisv2        xelisv2/xelisv2-pepew (PepePoW)\n\
                           xevan          Xevan (BitSend)\n\
                           yescrypt       Yescrypt for XMY, BSTY, and QBC\n\
                           yescryptR8     YescryptR8 for KOTO\n\
