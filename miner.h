@@ -282,6 +282,7 @@ int scanhash_x17(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *ha
 int scanhash_0x10(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_x20r(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_xevan(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
+int scanhash_xelisv2(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_yescrypt(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_yescryptr8(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
 int scanhash_yescryptr16(int thr_id, struct work *work, uint32_t max_nonce, uint64_t *hashes_done);
