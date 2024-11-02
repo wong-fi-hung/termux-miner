@@ -72,6 +72,7 @@ Algorithms
  * ✓ __vanilla__ (Blake-256 8-rounds - double sha256 [VNL])
  * ✓ __veltor__ (Veltor [VLT])
  * ✓ __velvet__
+ * ✓ __xelisv2__ __xelisv2/xelisv2-pepew__ (New Algo for PepePoW)
  * ✓ __xevan__ x17 x 2 on bigger header (BitSend [BSD])
  * ✓ __x11evo__ (Revolver [XRE])
  * ✓ __x11__ (Darkcoin [DRK], Hirocoin, Limecoin, ...)
