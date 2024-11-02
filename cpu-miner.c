@@ -1791,6 +1791,7 @@ static void stratum_gen_work(struct stratum_ctx *sctx, struct work *work)
 			case ALGO_NEOSCRYPT:
 			case ALGO_POWER2B:
 			case ALGO_PLUCK:
+			case ALGO_XELISV2:
 			case ALGO_YESCRYPT:
 			case ALGO_YESCRYPTR8:
 			case ALGO_YESCRYPTR16:
@@ -2151,6 +2152,7 @@ static void *miner_thread(void *userdata)
 			case ALGO_YESCRYPTR8:
 				max64 = 0x1ff;
 				break;
+			case ALGO_XELISV2:
 			case ALGO_YESCRYPTR16:
 			case ALGO_YESCRYPTR32:
 				max64 = 0xfff;
@@ -2472,6 +2474,9 @@ static void *miner_thread(void *userdata)
 			break;
 		case ALGO_0X10:
 			rc = scanhash_0x10(thr_id, &work, max_nonce, &hashes_done);
+			break;
+		case ALGO_XELISV2:
+			rc = scanhash_xelisv2(thr_id, &work, max_nonce, &hashes_done);
 			break;
 		case ALGO_XEVAN:
 			rc = scanhash_xevan(thr_id, &work, max_nonce, &hashes_done);
@@ -3085,7 +3090,11 @@ void parse_arg(int key, char *arg)
 			else if (!strcasecmp("ziftr", arg))
 				i = opt_algo = ALGO_ZR5;
 			else if (!strcasecmp("memehash", arg))
-				i = opt_algo = ALGO_MEME;
+				i = opt_algo = ALGO_MEME,
+				algo_names[opt_algo] = "memehash";
+			else if (!strcasecmp("xelisv2-pepew", arg))
+				i = opt_algo = ALGO_XELISV2,
+				algo_names[opt_algo] = "xelisv2-pepew";
 			else
 				applog(LOG_ERR, "Unknown algo parameter '%s'", arg);
 		}
