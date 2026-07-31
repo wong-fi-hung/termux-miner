@@ -14,7 +14,7 @@
 
 #include "miner.h"
 
-#if defined(__aarch64__) || defined(__ARM_NEON__)
+#if defined(__aarch64__) || defined(__ARM_NEON)
 #include <arm_neon.h>
 #endif
 
@@ -75,7 +75,7 @@ int scanhash_allium(int thr_id, struct work *work, uint32_t max_nonce, uint64_t 
 	/* Convert input data to big-endian once before the nonce loop.
 	   On AArch64/NEON we can use SIMD byte-reverse (vrev32q_u8) to
 	   convert four 32-bit words at a time for better performance. */
-#if defined(__aarch64__) || defined(__ARM_NEON__)
+#if defined(__aarch64__) || defined(__ARM_NEON)
 	{
 		/* Process 16 words (0..15) with NEON in 4x32-bit lanes */
 		for (int i = 0; i < 16; i += 4) {
