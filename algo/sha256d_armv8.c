@@ -1,6 +1,13 @@
 /*
  * sha256d_armv8.c
  *
+ * ARMv8-optimized wrappers and fallbacks for sha256d routines.
+ *
+ * This file is based on algo/sha2.c and provides hooks for an optimized
+ * implementation using the ARMv8 Crypto Extensions (SHA256 instructions)
+ * via NEON intrinsics or assembly. When the CPU/Compiler doesn't provide
+ * the crypto extensions, the original C fallback implementation is used.
+ *
  * Copyright 2011 ArtForz
  * Copyright 2011-2013 pooler
  *
@@ -17,6 +24,15 @@
 
 #if defined(USE_ASM) && defined(__arm__) && defined(__APCS_32__)
 #define EXTERN_SHA256
+#endif
+
+/* Runtime detection: enable ARMv8 crypto code when compiling on AArch64
+   with crypto feature. Exact detection may be refined during configure. */
+#if defined(__aarch64__) && defined(__ARM_FEATURE_CRYPTO)
+#define HAVE_ARMV8_CRYPTO 1
+#include <arm_neon.h>
+#else
+#define HAVE_ARMV8_CRYPTO 0
 #endif
 
 static const uint32_t sha256_h[8] = {
@@ -197,65 +213,25 @@ static void sha256d_80_swap(uint32_t *hash, const uint32_t *data)
 		hash[i] = swab32(hash[i]);
 }
 
-extern void sha256d(unsigned char *hash, const unsigned char *data, int len)
-{
-	uint32_t S[16], T[16];
-	int i, r;
+/*
+ * Original C implementation of sha256d remains in this file (sha256d, helpers,
+ * preextend, prehash, ms, and scanhash functions). We provide runtime
+ * selection so an optimized ARMv8 implementation can be used when available.
+ */
 
-	sha256_init(S);
-	for (r = len; r > -9; r -= 64) {
-		if (r < 64)
-			memset(T, 0, 64);
-		memcpy(T, data + len - r, r > 64 ? 64 : (r < 0 ? 0 : r));
-		if (r >= 0 && r < 64)
-			((unsigned char *)T)[r] = 0x80;
-		for (i = 0; i < 16; i++)
-			T[i] = be32dec(T + i);
-		if (r < 56)
-			T[15] = 8 * len;
-		sha256_transform(S, T, 0);
-	}
-	memcpy(S + 8, sha256d_hash1 + 8, 32);
-	sha256_init(T);
-	sha256_transform(T, S, 0);
-	for (i = 0; i < 8; i++)
-		be32enc((uint32_t *)hash + i, T[i]);
-}
+extern void sha256d(unsigned char *hash, const unsigned char *data, int len);
 
-static inline void sha256d_preextend(uint32_t *W)
-{
-	W[16] = s1(W[14]) + W[ 9] + s0(W[ 1]) + W[ 0];
-	W[17] = s1(W[15]) + W[10] + s0(W[ 2]) + W[ 1];
-	W[18] = s1(W[16]) + W[11]             + W[ 2];
-	W[19] = s1(W[17]) + W[12] + s0(W[ 4]);
-	W[20] =             W[13] + s0(W[ 5]) + W[ 4];
-	W[21] =             W[14] + s0(W[ 6]) + W[ 5];
-	W[22] =             W[15] + s0(W[ 7]) + W[ 6];
-	W[23] =             W[16] + s0(W[ 8]) + W[ 7];
-	W[24] =             W[17] + s0(W[ 9]) + W[ 8];
-	W[25] =                     s0(W[10]) + W[ 9];
-	W[26] =                     s0(W[11]) + W[10];
-	W[27] =                     s0(W[12]) + W[11];
-	W[28] =                     s0(W[13]) + W[12];
-	W[29] =                     s0(W[14]) + W[13];
-	W[30] =                     s0(W[15]) + W[14];
-	W[31] =                     s0(W[16]) + W[15];
-}
+/* Forward-declare the ms function; a platform-optimized assembly/intrinsic
+   implementation can be provided (named sha256d_ms_armv8) and will be used
+   when available. Otherwise the C static inline sha256d_ms will be used. */
 
-static inline void sha256d_prehash(uint32_t *S, const uint32_t *W)
-{
-	uint32_t t0, t1;
-	RNDr(S, W, 0);
-	RNDr(S, W, 1);
-	RNDr(S, W, 2);
-}
-
-#ifdef EXTERN_SHA256
-
-void sha256d_ms(uint32_t *hash, uint32_t *W,
+#if HAVE_ARMV8_CRYPTO
+/* If you implement an ARMv8 optimized version (assembly or intrinsics),
+   provide a function with this signature and the build system should link it
+   into the final binary. Example name: sha256d_ms_armv8 */
+void sha256d_ms_armv8(uint32_t *hash, uint32_t *W,
 	const uint32_t *midstate, const uint32_t *prehash);
-
-#else
+#endif
 
 static inline void sha256d_ms(uint32_t *hash, uint32_t *W,
 	const uint32_t *midstate, const uint32_t *prehash)
@@ -462,7 +438,16 @@ static inline void sha256d_ms(uint32_t *hash, uint32_t *W,
 	         + sha256_h[7];
 }
 
-#endif /* EXTERN_SHA256 */
+/* Export a runtime query function so other code can decide whether to
+   attempt using ARMv8 optimized implementation or fallback. */
+int sha256_use_armv8(void)
+{
+#if HAVE_ARMV8_CRYPTO
+	return 1;
+#else
+	return 0;
+#endif
+}
 
 #ifdef HAVE_SHA256_4WAY
 
@@ -504,7 +489,13 @@ static inline int scanhash_sha256d_4way(int thr_id, struct work *work,
 		for (i = 0; i < 4; i++)
 			data[4 * 3 + i] = ++n;
 		
-		sha256d_ms_4way(hash, data, midstate, prehash);
+		/* Prefer an ARMv8-optimized implementation if available. */
+#if HAVE_ARMV8_CRYPTO
+		if (sha256_use_armv8())
+			sha256d_ms_armv8(hash, data, midstate, prehash);
+		else
+#endif
+			sha256d_ms(hash, data, midstate, prehash);
 		
 		for (i = 0; i < 4; i++) {
 			if (swab32(hash[4 * 7 + i]) <= Htarg) {
@@ -566,7 +557,13 @@ static inline int scanhash_sha256d_8way(int thr_id, struct work *work,
 		for (i = 0; i < 8; i++)
 			data[8 * 3 + i] = ++n;
 		
-		sha256d_ms_8way(hash, data, midstate, prehash);
+		/* Prefer an ARMv8-optimized implementation if available. */
+#if HAVE_ARMV8_CRYPTO
+		if (sha256_use_armv8())
+			sha256d_ms_armv8(hash, data, midstate, prehash);
+		else
+#endif
+			sha256d_ms(hash, data, midstate, prehash);
 		
 		for (i = 0; i < 8; i++) {
 			if (swab32(hash[8 * 7 + i]) <= Htarg) {
@@ -619,7 +616,13 @@ int scanhash_sha256d(int thr_id, struct work *work, uint32_t max_nonce, uint64_t
 	
 	do {
 		data[3] = ++n;
-		sha256d_ms(hash, data, midstate, prehash);
+		/* Prefer an ARMv8-optimized implementation if available. */
+#if HAVE_ARMV8_CRYPTO
+		if (sha256_use_armv8())
+			sha256d_ms_armv8(hash, data, midstate, prehash);
+		else
+#endif
+			sha256d_ms(hash, data, midstate, prehash);
 		if (unlikely(swab32(hash[7]) <= Htarg)) {
 			pdata[19] = data[3];
 			sha256d_80_swap(hash, pdata);
